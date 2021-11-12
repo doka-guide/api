@@ -61,7 +61,7 @@ func (p *Form) SaveForm(db *gorm.DB) (*Form, error) {
 	return p, nil
 }
 
-// FindAllForms - Вывести все формы (максимальное количество задаётся параметром GET_LIMIT)
+// FindAllForms - Вывод все формы (максимальное количество задаётся параметром GET_LIMIT)
 func (p *Form) FindAllForms(db *gorm.DB) (*[]Form, error) {
 	var err error
 	posts := []Form{}
@@ -80,7 +80,7 @@ func (p *Form) FindAllForms(db *gorm.DB) (*[]Form, error) {
 	return &posts, nil
 }
 
-// FindFormByID - Вывести данные формы с ID
+// FindFormByID - Вывод данных формы с ID
 func (p *Form) FindFormByID(db *gorm.DB, pid uint64) (*Form, error) {
 	var err error
 	err = db.Debug().Model(&Form{}).Where("id = ?", pid).Take(&p).Error
@@ -96,7 +96,7 @@ func (p *Form) FindFormByID(db *gorm.DB, pid uint64) (*Form, error) {
 	return p, nil
 }
 
-// UpdateAForm - Обновить форму
+// UpdateAForm - Обновление формы
 func (p *Form) UpdateAForm(db *gorm.DB) (*Form, error) {
 	var err error
 	err = db.Debug().Model(&Form{}).Where("id = ?", p.ID).Updates(Form{Type: p.Type, Data: p.Data, UpdatedAt: time.Now()}).Error
@@ -112,7 +112,7 @@ func (p *Form) UpdateAForm(db *gorm.DB) (*Form, error) {
 	return p, nil
 }
 
-// DeleteAForm - Удалить форму
+// DeleteAForm - Удаление формы
 func (p *Form) DeleteAForm(db *gorm.DB, pid uint64, uid uint32) (int64, error) {
 	db = db.Debug().Model(&Form{}).Where("id = ? and author_id = ?", pid, uid).Take(&Form{}).Delete(&Form{})
 	if db.Error != nil {

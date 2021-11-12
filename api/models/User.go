@@ -6,13 +6,14 @@ import (
 	"log"
 	"strings"
 	"time"
+	"os"
 
 	"github.com/badoux/checkmail"
 	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
 )
 
-// User object
+// Произвольный пользователь
 type User struct {
 	ID        uint32    `gorm:"primary_key;auto_increment" json:"id"`
 	Nickname  string    `gorm:"size:255;not null;unique" json:"nickname"`
@@ -22,17 +23,17 @@ type User struct {
 	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
 
-// Hash function
+// Функция хеширования
 func Hash(password string) ([]byte, error) {
 	return bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 }
 
-// VerifyPassword - verifying of user password
+// VerifyPassword - Проверка пароля пользователя
 func VerifyPassword(hashedPassword, password string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 }
 
-// BeforeSave - preparing user saving
+// BeforeSave - Подготовка к сохранению пользователя
 func (u *User) BeforeSave() error {
 	hashedPassword, err := Hash(u.Password)
 	if err != nil {
@@ -42,7 +43,7 @@ func (u *User) BeforeSave() error {
 	return nil
 }
 
-// Prepare - preparing user info
+// Prepare - Подготовка информации о пользователе
 func (u *User) Prepare() {
 	u.ID = 0
 	u.Nickname = html.EscapeString(strings.TrimSpace(u.Nickname))
@@ -51,54 +52,54 @@ func (u *User) Prepare() {
 	u.UpdatedAt = time.Now()
 }
 
-// Validate - validation of user password
+// Validate - Валидация учётных данных пользователя
 func (u *User) Validate(action string) error {
 	switch strings.ToLower(action) {
 	case "update":
 		if u.Nickname == "" {
-			return errors.New("Required Nickname")
+			return errors.New("Требуется имя пользователя")
 		}
 		if u.Password == "" {
-			return errors.New("Required Password")
+			return errors.New("Требуется пароль")
 		}
 		if u.Email == "" {
-			return errors.New("Required Email")
+			return errors.New("Требуется электронная почта")
 		}
 		if err := checkmail.ValidateFormat(u.Email); err != nil {
-			return errors.New("Invalid Email")
+			return errors.New("Такой почты быть не может")
 		}
 
 		return nil
 	case "login":
 		if u.Password == "" {
-			return errors.New("Required Password")
+			return errors.New("Требуется пароль")
 		}
 		if u.Email == "" {
-			return errors.New("Required Email")
+			return errors.New("Требуется электронная почта")
 		}
 		if err := checkmail.ValidateFormat(u.Email); err != nil {
-			return errors.New("Invalid Email")
+			return errors.New("Такой почты быть не может")
 		}
 		return nil
 
 	default:
 		if u.Nickname == "" {
-			return errors.New("Required Nickname")
+			return errors.New("Требуется имя пользователя")
 		}
 		if u.Password == "" {
-			return errors.New("Required Password")
+			return errors.New("Требуется пароль")
 		}
 		if u.Email == "" {
-			return errors.New("Required Email")
+			return errors.New("Требуется электронная почта")
 		}
 		if err := checkmail.ValidateFormat(u.Email); err != nil {
-			return errors.New("Invalid Email")
+			return errors.New("Такой почты быть не может")
 		}
 		return nil
 	}
 }
 
-// SaveUser - saving user info
+// SaveUser - Сохранение информации о пользователе
 func (u *User) SaveUser(db *gorm.DB) (*User, error) {
 
 	var err error
@@ -109,18 +110,18 @@ func (u *User) SaveUser(db *gorm.DB) (*User, error) {
 	return u, nil
 }
 
-// FindAllUsers - limited by 100 getting of all users from DB
+// FindAllUsers - Вывод всех пользователей (максимальное количество задаётся параметром GET_LIMIT)
 func (u *User) FindAllUsers(db *gorm.DB) (*[]User, error) {
 	var err error
 	users := []User{}
-	err = db.Debug().Model(&User{}).Limit(100).Find(&users).Error
+	err = db.Debug().Model(&User{}).Limit(os.Getenv("GET_LIMIT")).Find(&users).Error
 	if err != nil {
 		return &[]User{}, err
 	}
 	return &users, err
 }
 
-// FindUserByID - searching user by id
+// FindUserByID - Вывод информации о пользователе с ID
 func (u *User) FindUserByID(db *gorm.DB, uid uint32) (*User, error) {
 	var err error
 	err = db.Debug().Model(User{}).Where("id = ?", uid).Take(&u).Error
@@ -133,10 +134,10 @@ func (u *User) FindUserByID(db *gorm.DB, uid uint32) (*User, error) {
 	return u, err
 }
 
-// UpdateAUser - updating user info
+// UpdateAUser - Обновление информации о пользователе
 func (u *User) UpdateAUser(db *gorm.DB, uid uint32) (*User, error) {
 
-	// To hash the password
+	// Хеширование пароля
 	err := u.BeforeSave()
 	if err != nil {
 		log.Fatal(err)
@@ -152,7 +153,7 @@ func (u *User) UpdateAUser(db *gorm.DB, uid uint32) (*User, error) {
 	if db.Error != nil {
 		return &User{}, db.Error
 	}
-	// This is the display the updated user
+	// Вывод обновленной информации о пользователе
 	err = db.Debug().Model(&User{}).Where("id = ?", uid).Take(&u).Error
 	if err != nil {
 		return &User{}, err
@@ -160,7 +161,7 @@ func (u *User) UpdateAUser(db *gorm.DB, uid uint32) (*User, error) {
 	return u, nil
 }
 
-// DeleteAUser - deletion of user
+// DeleteAUser - Удаление пользователя
 func (u *User) DeleteAUser(db *gorm.DB, uid uint32) (int64, error) {
 
 	db = db.Debug().Model(&User{}).Where("id = ?", uid).Take(&User{}).Delete(&User{})
