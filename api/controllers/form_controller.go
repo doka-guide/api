@@ -63,11 +63,7 @@ func (server *Server) CreateForm(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, formCreated.ID))
 	responses.JSON(w, http.StatusCreated, formCreated)
 
-	subject := "The new form submitted on "
-	switch form.AuthorID {
-	case 1:
-		subject += "https://example.com"
-	}
+	subject := "Новая форма была заполнена на сайте"
 	emailBody := ""
 	switch form.Type {
 	case "newsletter":
