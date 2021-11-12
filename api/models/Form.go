@@ -5,11 +5,12 @@ import (
 	"html"
 	"strings"
 	"time"
+	"os"
 
 	"github.com/jinzhu/gorm"
 )
 
-// Form object
+// Произвольная форма
 type Form struct {
 	ID        uint64    `gorm:"primary_key;auto_increment" json:"id"`
 	Type      string    `gorm:"size:255;not null;" json:"type"`
@@ -20,7 +21,7 @@ type Form struct {
 	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
 
-// Prepare - preparing form
+// Prepare - Подготовка формы
 func (p *Form) Prepare() {
 	p.ID = 0
 	p.Type = html.EscapeString(strings.TrimSpace(p.Type))
@@ -30,21 +31,21 @@ func (p *Form) Prepare() {
 	p.UpdatedAt = time.Now()
 }
 
-// Validate - validation form
+// Validate - Валидация формы
 func (p *Form) Validate() error {
 	if p.Type == "" {
-		return errors.New("Required Type")
+		return errors.New("Необходимо указать тип формы")
 	}
 	if p.Data == "" {
-		return errors.New("Required Data")
+		return errors.New("Нужна дата и время отправки формы")
 	}
 	if p.AuthorID < 1 {
-		return errors.New("Required Author")
+		return errors.New("Необходимо указать ID пользователя")
 	}
 	return nil
 }
 
-// SaveForm - saving form
+// SaveForm - Сохранение формы
 func (p *Form) SaveForm(db *gorm.DB) (*Form, error) {
 	var err error
 	err = db.Debug().Model(&Form{}).Create(&p).Error
@@ -60,11 +61,11 @@ func (p *Form) SaveForm(db *gorm.DB) (*Form, error) {
 	return p, nil
 }
 
-// FindAllForms - limited by 2000 getting of all form from DB
+// FindAllForms - Вывести все формы (максимальное количество задаётся параметром GET_LIMIT)
 func (p *Form) FindAllForms(db *gorm.DB) (*[]Form, error) {
 	var err error
 	posts := []Form{}
-	err = db.Debug().Model(&Form{}).Limit(2000).Find(&posts).Error
+	err = db.Debug().Model(&Form{}).Limit(os.Getenv("GET_LIMIT")).Find(&posts).Error
 	if err != nil {
 		return &[]Form{}, err
 	}
@@ -79,7 +80,7 @@ func (p *Form) FindAllForms(db *gorm.DB) (*[]Form, error) {
 	return &posts, nil
 }
 
-// FindFormByID - searching form by id
+// FindFormByID - Вывести данные формы с ID
 func (p *Form) FindFormByID(db *gorm.DB, pid uint64) (*Form, error) {
 	var err error
 	err = db.Debug().Model(&Form{}).Where("id = ?", pid).Take(&p).Error
@@ -95,7 +96,7 @@ func (p *Form) FindFormByID(db *gorm.DB, pid uint64) (*Form, error) {
 	return p, nil
 }
 
-// UpdateAForm - updating form
+// UpdateAForm - Обновить форму
 func (p *Form) UpdateAForm(db *gorm.DB) (*Form, error) {
 	var err error
 	err = db.Debug().Model(&Form{}).Where("id = ?", p.ID).Updates(Form{Type: p.Type, Data: p.Data, UpdatedAt: time.Now()}).Error
@@ -111,7 +112,7 @@ func (p *Form) UpdateAForm(db *gorm.DB) (*Form, error) {
 	return p, nil
 }
 
-// DeleteAForm - deletion of form
+// DeleteAForm - Удалить форму
 func (p *Form) DeleteAForm(db *gorm.DB, pid uint64, uid uint32) (int64, error) {
 	db = db.Debug().Model(&Form{}).Where("id = ? and author_id = ?", pid, uid).Take(&Form{}).Delete(&Form{})
 	if db.Error != nil {
