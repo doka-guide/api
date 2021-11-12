@@ -56,7 +56,7 @@ DB_PORT=
 ```bash
 $ curl -X POST \
   -H "Content-Type: application/json" \
-  -d '{"email":"info@svetlanadanovich.com", "password":"d8R2bg2lnqE7zh9mUFvz6D6GFrKDJeupUzDrLnkx"}' \
+  -d '{"email":"<email>", "password":"<пароль>"}' \
   localhost:8080/login
 ```
 
@@ -69,7 +69,7 @@ $ curl -X POST \
 ```bash
 $ curl -X GET \
   -H "Content-Type: : application/json" \
-  -H "Authorization: <KEY>" \
+  -H "Authorization: <ключ авторизации>" \
   -H "Content-Type: application/json" \
   localhost:8080/form
 ```
@@ -81,7 +81,7 @@ $ curl -X GET \
 ```bash
 $ curl -X POST \
   -H "Accept: application/json" \
-  -H "Authorization: <KEY>" \
+  -H "Authorization: <ключ авторизации>" \
   -H "Content-Type: application/json" \
   -d '{<Данные формы>}' \
   localhost:8080/form
