@@ -66,33 +66,14 @@ func (server *Server) CreateForm(w http.ResponseWriter, r *http.Request) {
 	subject := "Новая форма была заполнена на сайте"
 	emailBody := ""
 	switch form.Type {
-	case "newsletter":
-		submittedForm := models.FormNewsletter{}
+	case "feedback":
+		submittedForm := models.FormFeedback{}
 		err = json.Unmarshal([]byte(form.Data), &submittedForm)
 		if err != nil {
 			responses.ERROR(w, http.StatusUnprocessableEntity, err)
 			return
 		}
-		emailBody = "Form type: Newsletter\n" + submittedForm.ToString()
-		submittedForm.SendConfirmationLetter()
-	case "questionnaire":
-		submittedForm := models.FormQuestionnaire{}
-		err = json.Unmarshal([]byte(form.Data), &submittedForm)
-		if err != nil {
-			responses.ERROR(w, http.StatusUnprocessableEntity, err)
-			return
-		}
-		emailBody = "Form type: Questionnaire\n" + submittedForm.ToString()
-		submittedForm.SendConfirmationLetter()
-	case "writetous":
-		submittedForm := models.FormWriteToUs{}
-		err = json.Unmarshal([]byte(form.Data), &submittedForm)
-		if err != nil {
-			responses.ERROR(w, http.StatusUnprocessableEntity, err)
-			return
-		}
-		emailBody = "Form type: Write To Us\n" + submittedForm.ToString()
-		submittedForm.SendConfirmationLetter()
+		emailBody = "Тип: Отзыв о статье\n" + submittedForm.ToString()
 	}
 
 	for i := range users {
