@@ -26,6 +26,5 @@ jobs:
           rsync -e "ssh -i $HOME/.ssh/doka_deploy -o StrictHostKeyChecking=no" --archive --progress --compress --delete . deploy@doka.guide:$(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2))
       - name: Развёртывание приложения
         run: |
-          ssh -i $HOME/.ssh/doka_deploy deploy@doka.guide cd $(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2)) && docker-compose down
           ssh -i $HOME/.ssh/doka_deploy deploy@doka.guide cd $(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2)) && docker-compose build api
-          ssh -i $HOME/.ssh/doka_deploy deploy@doka.guide cd $(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2)) && docker-compose up --no-deps --detach -d api
+          ssh -i $HOME/.ssh/doka_deploy deploy@doka.guide cd $(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2)) && docker-compose up --no-deps --detach --force-recreate -d api
