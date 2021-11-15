@@ -4,8 +4,8 @@ import (
 	"errors"
 	"net/http"
 
-	"../auth"
-	"../responses"
+	"github.com/doka-guide/api/api/auth"
+	"github.com/doka-guide/api/api/responses"
 )
 
 // SetMiddlewareJSON – setup of middleware for HTTP response

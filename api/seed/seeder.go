@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"../models"
+	"github.com/doka-guide/api/api/models"
 	"github.com/jinzhu/gorm"
 )
 

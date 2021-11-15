@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./api"
+	"github.com/doka-guide/api/api"
 )
 
 func main() {

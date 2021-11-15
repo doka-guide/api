@@ -20,6 +20,7 @@ MODE=
 
 # Настройки приложения
 APP_HOST=
+APP_PORT=
 APP_NAME=
 
 # Настройка соединения с почтовым сервером
@@ -27,6 +28,9 @@ MAIL_TYPE=
 MAIL_HOST=
 MAIL_USER=
 MAIL_PASS=
+
+# Ограничения API
+GET_LIMIT=1000
 
 # Настройки загрузки файлов пользователей через форму
 UPLOAD_FOLDER=
@@ -45,6 +49,7 @@ DB_USER=
 DB_PASSWORD=
 DB_NAME=
 DB_PORT=
+DB_DATA=
 ```
 
 ## Формат запросов и ответов

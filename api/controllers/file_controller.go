@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"time"
 
-	"../responses"
+	"github.com/doka-guide/api/api/responses"
 	"github.com/joho/godotenv"
 )
 

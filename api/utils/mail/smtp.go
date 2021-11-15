@@ -38,6 +38,8 @@ func SendMail(toSender string, toAddress string, subj string, body string) error
 		ServerName:         host,
 	}
 
+	var c smtp.Client
+
 	if os.Getenv("MAIL_TYPE") == "SSL" {
 		conn, err := tls.Dial("tcp", servername, tlsconfig)
 		if err != nil {
@@ -48,6 +50,8 @@ func SendMail(toSender string, toAddress string, subj string, body string) error
 		if err != nil {
 			return err
 		}
+
+		fmt.Sprintf("Соединение установлено с %s", c.Text)
 	}
 
 	if os.Getenv("MAIL_TYPE") == "StartTLS" {
@@ -59,16 +63,16 @@ func SendMail(toSender string, toAddress string, subj string, body string) error
 	}
 
 	// Авторизация
-	if err = c.Auth(auth); err != nil {
+	if err := c.Auth(auth); err != nil {
 		return err
 	}
 
 	// Настройка отправителя и получателя
-	if err = c.Mail(from.Address); err != nil {
+	if err := c.Mail(from.Address); err != nil {
 		return err
 	}
 
-	if err = c.Rcpt(to.Address); err != nil {
+	if err := c.Rcpt(to.Address); err != nil {
 		return err
 	}
 

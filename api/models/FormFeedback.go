@@ -2,8 +2,6 @@ package models
 
 import (
 	"fmt"
-
-	"../utils/mail"
 )
 
 // FormFeedback – Форма для отзыва пользователя о статье

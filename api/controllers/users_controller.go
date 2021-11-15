@@ -8,10 +8,10 @@ import (
 	"net/http"
 	"strconv"
 
-	"../auth"
-	"../models"
-	"../responses"
-	"../utils/formaterror"
+	"github.com/doka-guide/api/api/auth"
+	"github.com/doka-guide/api/api/models"
+	"github.com/doka-guide/api/api/responses"
+	"github.com/doka-guide/api/api/utils/formaterror"
 	"github.com/gorilla/mux"
 )
 

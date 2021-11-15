@@ -10,7 +10,7 @@ import (
 
 	_ "github.com/jinzhu/gorm/dialects/postgres" //postgres database driver
 
-	"../models"
+	"github.com/doka-guide/api/api/models"
 )
 
 // Server object

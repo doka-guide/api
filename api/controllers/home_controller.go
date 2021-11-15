@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"os"
 
-	"../responses"
+	"github.com/doka-guide/api/api/responses"
 )
 
 // API точка входа

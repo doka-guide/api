@@ -1,6 +1,6 @@
 package controllers
 
-import "../middlewares"
+import "github.com/doka-guide/api/api/middlewares"
 
 func (s *Server) initializeRoutes() {
 
