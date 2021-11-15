@@ -43,6 +43,6 @@ func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, D
 
 // Run Server
 func (server *Server) Run(addr string) {
-	fmt.Println("Запустился на хосте %s", addr)
+	fmt.Println("Запустился на хосте", addr)
 	log.Fatal(http.ListenAndServe(addr, server.Router))
 }
