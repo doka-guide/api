@@ -28,4 +28,4 @@ jobs:
           ls
       - name: Публикация приложения
         run: |
-          rsync -e \"ssh -i $HOME/.ssh/doka_deploy -o StrictHostKeyChecking=no\" --archive --progress --compress --delete . deploy@doka.guide:$(echo $(grep 'SERVER_PATH' ../.env | cut -d '=' -f2))
+          rsync -e \"ssh -i $HOME/.ssh/doka_deploy -o StrictHostKeyChecking=no\" --archive --progress --compress --delete . deploy@doka.guide:$(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2))
