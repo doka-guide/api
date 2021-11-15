@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:14.1-alpine
+    restart: always
+    volumes:
+      - db_data:${DB_DATA}
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      PGDATA: ${DB_DATA}
+
+  api:
+    restart: always
+    build: 
+      context: .
+      args:
+        APP_PORT: ${APP_PORT}
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    depends_on:
+      - db
+    
+volumes:
+  db_data: {}
