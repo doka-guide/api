@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"os"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -18,9 +19,9 @@ import (
 
 var users = []models.User{
 	models.User{
-		Nickname: "Igor Korovchenko",
-		Email:    "igsekor@gmail.com",
-		Password: "MdyVHvqJwU74SrL4cX23QpPOeltWTCjXLuoztDf9",
+		Nickname: os.Getenv("USER_NAME"),
+		Email:    os.Getenv("USER_MAIL"),
+		Password: os.Getenv("USER_PASS"),
 	},
 }
 
