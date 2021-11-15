@@ -17,12 +17,10 @@ jobs:
           mkdir "$HOME/.ssh"
           echo "${{ secrets.DEPLOY_KEY }}" > "$HOME/.ssh/doka_deploy"
           chmod 600 "$HOME/.ssh/doka_deploy"
-      - name: Установка ключа для пользователя
+      - name: Установка переменных окружения
         run: |
           set -eu
-          mkdir "$HOME/.ssh"
-          echo "${{ secrets.DEPLOY_KEY }}" > "$HOME/.ssh/doka_deploy"
-          chmod 600 "$HOME/.ssh/doka_deploy"
+          echo "${{ secrets.DEPLOY_ENV }}" > ".env"
       - name: Копирование настроек окружения
         run: |
           set -eu
