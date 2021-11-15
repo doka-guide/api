@@ -25,7 +25,10 @@ jobs:
         run: |
           set -eu
           echo "${{ secrets.DEPLOY_KEY }}" > ".env"
-          ls
+          ls -a
       - name: Публикация приложения
         run: |
           rsync -e \"ssh -i $HOME/.ssh/doka_deploy -o StrictHostKeyChecking=no\" --archive --progress --compress --delete . deploy@doka.guide:$(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2))
+          ssh deploy@doka.guide docker-compose down
+          ssh deploy@doka.guide docker-compose build api
+          ssh deploy@doka.guide docker-compose up --no-deps -d api
