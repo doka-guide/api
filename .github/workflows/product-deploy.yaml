@@ -1,0 +1,33 @@
+name: Product Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  product-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Загрузка репозитория
+        uses: actions/checkout@v2
+      - name: Установка ключа для пользователя
+        run: |
+          set -eu
+          mkdir "$HOME/.ssh"
+          echo "${{ secrets.DEPLOY_KEY }}" > "$HOME/.ssh/doka_deploy"
+          chmod 600 "$HOME/.ssh/doka_deploy"
+      - name: Установка ключа для пользователя
+        run: |
+          set -eu
+          mkdir "$HOME/.ssh"
+          echo "${{ secrets.DEPLOY_KEY }}" > "$HOME/.ssh/doka_deploy"
+          chmod 600 "$HOME/.ssh/doka_deploy"
+      - name: Копирование настроек окружения
+        run: |
+          set -eu
+          echo "${{ secrets.DEPLOY_KEY }}" > ".env"
+          ls
+      - name: Публикация приложения
+        run: |
+          rsync -e \"ssh -i $HOME/.ssh/doka_deploy -o StrictHostKeyChecking=no\" --archive --progress --compress --delete . deploy@doka.guide:$(echo $(grep 'SERVER_PATH' ../.env | cut -d '=' -f2))
