@@ -17,15 +17,10 @@ jobs:
           mkdir "$HOME/.ssh"
           echo "${{ secrets.DEPLOY_KEY }}" > "$HOME/.ssh/doka_deploy"
           chmod 600 "$HOME/.ssh/doka_deploy"
-      - name: Установка переменных окружения
-        run: |
-          set -eu
-          echo "${{ secrets.DEPLOY_ENV }}" > ".env"
       - name: Копирование настроек окружения
         run: |
           set -eu
-          echo "${{ secrets.DEPLOY_KEY }}" > ".env"
-          ls -a
+          echo "${{ secrets.DEPLOY_ENV }}" > ".env"
       - name: Публикация приложения
         run: |
           rsync -e "ssh -i $HOME/.ssh/doka_deploy -o StrictHostKeyChecking=no" --archive --progress --compress --delete . deploy@doka.guide:$(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2))
