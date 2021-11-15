@@ -27,4 +27,4 @@ jobs:
       - name: Развёртывание приложения
         run: |
           ssh -i $HOME/.ssh/doka_deploy deploy@doka.guide cd $(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2)) && docker-compose build api
-          ssh -i $HOME/.ssh/doka_deploy deploy@doka.guide cd $(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2)) && docker-compose up --no-deps -detach api
+          ssh -i $HOME/.ssh/doka_deploy deploy@doka.guide cd $(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2)) && docker-compose up --detach --force-recreate
