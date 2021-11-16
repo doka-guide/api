@@ -28,4 +28,4 @@ jobs:
           eval `ssh-agent -s`
           ssh-add -k "$HOME/.ssh/doka_deploy"
           export DOCKER_HOST="ssh://deploy@doka.guide"
-          docker-compose ps
+          docker ps
