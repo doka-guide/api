@@ -17,6 +17,7 @@ jobs:
           mkdir "$HOME/.ssh"
           echo "${{ secrets.DEPLOY_KEY }}" > "$HOME/.ssh/doka_deploy"
           chmod 600 "$HOME/.ssh/doka_deploy"
+          eval `ssh-agent -s`
           ssh-add -k "$HOME/.ssh/doka_deploy"
       - name: Копирование настроек окружения
         run: |
