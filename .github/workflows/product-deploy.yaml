@@ -29,3 +29,8 @@ jobs:
           ssh-add -k "$HOME/.ssh/doka_deploy"
           export DOCKER_HOST="ssh://deploy@doka.guide"
           docker ps
+          docker compose ls
+          docker-compose build api
+          docker-compose up --no-deps --detach -d api
+          docker ps
+          docker compose ls
