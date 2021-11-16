@@ -18,7 +18,7 @@ jobs:
           echo "${{ secrets.DEPLOY_KEY }}" > "$HOME/.ssh/doka.guide"
           chmod 600 "$HOME/.ssh/doka.guide"
           eval `ssh-agent -s`
-          ssh-add -k "$HOME/.ssh/doka.guide"
+          ssh-add - <<< "${{ secrets.DEPLOY_KEY }}"
       - name: Копирование настроек окружения
         run: |
           set -eu
