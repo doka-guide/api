@@ -30,7 +30,7 @@ jobs:
           export DOCKER_HOST="ssh://deploy@doka.guide"
           docker ps
           docker compose ls
-          docker-compose --file /web/apps/api/www build api
-          docker-compose --file /web/apps/api/www up --no-deps --detach -d api
+          docker-compose --file /web/apps/api/www/docker-compose.yaml build api
+          docker-compose --file /web/apps/api/www/docker-compose.yaml up --no-deps --detach -d api
           docker ps
           docker compose ls
