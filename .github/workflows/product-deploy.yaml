@@ -27,6 +27,7 @@ jobs:
         run: |
           eval `ssh-agent -s`
           ssh-add -k "$HOME/.ssh/doka_deploy"
-          export DOCKER_HOST="deploy@doka.guide"
+          export DOCKER_HOST="ssh://deploy@doka.guide"
+          export DOCKER_CONFIG="/web/apps/api/www"
           docker-compose build api
           docker-compose up --no-deps --detach -d api
