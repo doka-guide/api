@@ -17,14 +17,14 @@ jobs:
           mkdir "$HOME/.ssh"
           echo "${{ secrets.DEPLOY_KEY }}" > "$HOME/.ssh/doka_deploy"
           chmod 600 "$HOME/.ssh/doka_deploy"
+          ssh-add -k $HOME/.ssh/doka_deploy
       - name: Копирование настроек окружения
         run: |
           set -eu
           echo "${{ secrets.DEPLOY_ENV }}" > ".env"
       - name: Публикация приложения
         run: |
-          rsync -e "ssh -i $HOME/.ssh/doka_deploy -o StrictHostKeyChecking=no" --archive --progress --compress --delete . deploy@doka.guide:$(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2))
+          rsync -e "ssh --archive --progress --compress --delete . deploy@doka.guide:$(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2))
       - name: Развёртывание приложения
         run: |
-          ssh -i $HOME/.ssh/doka_deploy deploy@doka.guide cd $(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2)) && docker-compose build api
-          ssh -i $HOME/.ssh/doka_deploy deploy@doka.guide cd $(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2)) && docker-compose up --detach --force-recreate
+          ssh deploy@doka.guide cd $(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2)dps aux | grep "docker daemon"
