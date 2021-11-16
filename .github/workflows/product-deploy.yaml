@@ -15,10 +15,10 @@ jobs:
         run: |
           set -eu
           mkdir "$HOME/.ssh"
-          echo "${{ secrets.DEPLOY_KEY }}" > "$HOME/.ssh/deploy"
-          chmod 600 "$HOME/.ssh/deploy"
+          echo "${{ secrets.DEPLOY_KEY }}" > "$HOME/.ssh/doka.guide"
+          chmod 600 "$HOME/.ssh/doka.guide"
           eval `ssh-agent -s`
-          ssh-add -k "$HOME/.ssh/deploy"
+          ssh-add -k "$HOME/.ssh/doka.guide"
       - name: Копирование настроек окружения
         run: |
           set -eu
