@@ -17,8 +17,6 @@ jobs:
           mkdir "$HOME/.ssh"
           echo "${{ secrets.DEPLOY_KEY }}" > "$HOME/.ssh/doka_deploy"
           chmod 600 "$HOME/.ssh/doka_deploy"
-          eval `ssh-agent -s`
-          ssh-add -k "$HOME/.ssh/doka_deploy"
       - name: Копирование настроек окружения
         run: |
           echo "${{ secrets.DEPLOY_ENV }}" > ".env"
@@ -27,4 +25,8 @@ jobs:
           rsync -e "ssh -i $HOME/.ssh/doka_deploy -o StrictHostKeyChecking=no" --archive --progress --compress --delete . deploy@doka.guide:$(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2))
       - name: Развёртывание приложения
         run: |
-          ssh deploy@doka.guide cd $(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2)) && docker-compose build api && docker-compose up --no-deps --detach -d api
+          eval `ssh-agent -s`
+          ssh-add -k "$HOME/.ssh/doka_deploy"
+          export DOCKER_HOST="deploy@doka.guide"
+          docker-compose build api
+          docker-compose up --no-deps --detach -d api
