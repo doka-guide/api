@@ -17,9 +17,6 @@ jobs:
           mkdir "$HOME/.ssh"
           echo "${{ secrets.DEPLOY_KEY }}" > "$HOME/.ssh/doka_deploy"
           chmod 600 "$HOME/.ssh/doka_deploy"
-      - name: Копирование настроек окружения
-        run: |
-          echo "${{ secrets.DEPLOY_ENV }}" > ".env"
       - name: Публикация приложения
         run: |
           ARTIFACT_PATH="$(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2))"
@@ -28,6 +25,5 @@ jobs:
           ssh-add -k "$HOME/.ssh/doka_deploy"
           export DOCKER_HOST="ssh://deploy@doka.guide"
           docker ps
-          docker-compose --project-directory "$ARTIFACT_PATH/" build api
-          docker-compose --project-directory "$ARTIFACT_PATH/" up --no-deps --detach api
+          $(echo "${{ secrets.DEPLOY_ENV }}") docker-compose --project-directory "$ARTIFACT_PATH/" build api && docker-compose --project-directory "$ARTIFACT_PATH/" up --no-deps --detach api
           docker ps
