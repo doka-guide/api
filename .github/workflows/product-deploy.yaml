@@ -23,7 +23,7 @@ jobs:
       - name: Публикация приложения
         run: |
           $ARTIFACT_PATH=$(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2))
-          rsync -e "ssh -i $HOME/.ssh/doka_deploy -o StrictHostKeyChecking=no" --archive --progress --compress --delete . deploy@doka.guide:$ARTIFACT_PATH
+          rsync -e "ssh -i $HOME/.ssh/doka_deploy -o StrictHostKeyChecking=no" --archive --progress --compress --delete . deploy@doka.guide:"$ARTIFACT_PATH"
       - name: Развёртывание приложения
         run: |
           eval `ssh-agent -s`
