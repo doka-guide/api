@@ -28,6 +28,6 @@ jobs:
           ssh-add -k "$HOME/.ssh/doka_deploy"
           export DOCKER_HOST="ssh://deploy@doka.guide"
           docker ps
-          docker-compose --project-directory "$ARTIFACT_PATH/" --env-file "$ARTIFACT_PATH/.env" build api
-          docker-compose --project-directory "$ARTIFACT_PATH/" --env-file "$ARTIFACT_PATH/.env" up --no-deps --detach api
+          docker-compose --project-directory "$ARTIFACT_PATH/" --env-file "./.env" build api
+          docker-compose --project-directory "$ARTIFACT_PATH/" --env-file "./.env" up --no-deps --detach api
           docker ps
