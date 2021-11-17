@@ -22,7 +22,8 @@ jobs:
           echo "${{ secrets.DEPLOY_ENV }}" > ".env"
       - name: Публикация приложения
         run: |
-          rsync -e "ssh -i $HOME/.ssh/doka_deploy -o StrictHostKeyChecking=no" --archive --progress --compress --delete . deploy@doka.guide:$(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2))
+          $ARTIFACT_PATH=$(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2))
+          rsync -e "ssh -i $HOME/.ssh/doka_deploy -o StrictHostKeyChecking=no" --archive --progress --compress --delete . deploy@doka.guide:$ARTIFACT_PATH
       - name: Развёртывание приложения
         run: |
           eval `ssh-agent -s`
@@ -30,7 +31,7 @@ jobs:
           export DOCKER_HOST="ssh://deploy@doka.guide"
           docker ps
           docker compose ls
-          docker-compose --file /web/apps/api/www/docker-compose.yaml build api
-          docker-compose --file /web/apps/api/www/docker-compose.yaml up --no-deps --detach -d api
+          docker-compose --file "$DOCKER_HOST:$ARTIFACT_PATH/docker-compose.yaml" build api
+          docker-compose --file "$DOCKER_HOST:$ARTIFACT_PATH/docker-compose.yaml" up --no-deps --detach api
           docker ps
           docker compose ls
