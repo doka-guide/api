@@ -4,8 +4,6 @@ services:
   db:
     image: postgres:14.1-alpine
     restart: always
-    env_file:
-      - ./.env
     volumes:
       - db_data:${DB_DATA}
     environment:
@@ -16,8 +14,6 @@ services:
 
   api:
     restart: always
-    env_file:
-      - ./.env
     build: 
       context: .
       args:
