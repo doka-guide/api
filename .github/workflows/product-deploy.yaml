@@ -27,8 +27,7 @@ jobs:
           eval `ssh-agent -s`
           ssh-add -k "$HOME/.ssh/doka_deploy"
           export DOCKER_HOST="ssh://deploy@doka.guide"
-          export COMPOSE_FILE="$ARTIFACT_PATH/docker-compose.yaml"
           docker ps
-          docker-compose build api
-          docker-compose up --no-deps --detach api
+          docker-compose --project-directory "$ARTIFACT_PATH/ build api
+          docker-compose --project-directory "$ARTIFACT_PATH/ up --no-deps --detach api
           docker ps
