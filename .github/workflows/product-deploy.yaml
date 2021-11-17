@@ -17,6 +17,8 @@ jobs:
           mkdir "$HOME/.ssh"
           echo "${{ secrets.DEPLOY_KEY }}" > "$HOME/.ssh/doka_deploy"
           chmod 600 "$HOME/.ssh/doka_deploy"
+          eval `ssh-agent -s`
+          ssh-add -k "$HOME/.ssh/doka_deploy"
       - name: Копирование настроек окружения
         run: |
           echo "${{ secrets.DEPLOY_ENV }}" > ".env"
@@ -24,9 +26,11 @@ jobs:
         run: |
           ARTIFACT_PATH="$(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2))"
           rsync -e "ssh -i $HOME/.ssh/doka_deploy -o StrictHostKeyChecking=no" --archive --progress --compress --delete . deploy@doka.guide:"$ARTIFACT_PATH"
-          eval `ssh-agent -s`
-          ssh-add -k "$HOME/.ssh/doka_deploy"
           export DOCKER_HOST="ssh://deploy@doka.guide"
+          if [ -f .env ]; then
+            export $(cat .env | sed 's/#.*//g' | xargs)
+          fi
           docker ps
+          docker-compose --project-directory "$ARTIFACT_PATH/" build api
           docker-compose --project-directory "$ARTIFACT_PATH/" up --no-deps --detach api
           docker ps
