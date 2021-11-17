@@ -32,7 +32,7 @@ jobs:
           ARTIFACT_PATH="../..$(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2))"
           docker ps
           docker compose ls
-          docker-compose --file "$DOCKER_HOST:$ARTIFACT_PATH/docker-compose.yaml" build api
-          docker-compose --file "$DOCKER_HOST:$ARTIFACT_PATH/docker-compose.yaml" up --no-deps --detach api
+          docker-compose --file "$ARTIFACT_PATH/docker-compose.yaml" build api
+          docker-compose --file "$ARTIFACT_PATH/docker-compose.yaml" up --no-deps --detach api
           docker ps
           docker compose ls
