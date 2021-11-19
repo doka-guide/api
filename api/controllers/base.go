@@ -30,7 +30,7 @@ func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, D
 			fmt.Printf("Не могу подсоединиться к базе данных, используя драйвер %s", Dbdriver)
 			log.Fatal("Ошибка:", err)
 		} else {
-			fmt.Printf("База данных %s подключена", Dbdriver)
+			fmt.Printf("База данных %s подключена\n", Dbdriver)
 		}
 	}
 
