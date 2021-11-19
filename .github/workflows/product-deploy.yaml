@@ -17,7 +17,7 @@ jobs:
       - name: Развёртывание приложения
         run: |
           eval `ssh-agent -s`
-          ssh-add <<< "${{ secrets.DEPLOY_KEY }}"
+          ssh-add - <<< "${{ secrets.DEPLOY_KEY }}"
           export DOCKER_HOST="ssh://deploy@doka.guide"
           docker ps
           docker-compose --project-directory ./ up --force-recreate --detach 
