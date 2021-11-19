@@ -11,13 +11,17 @@ jobs:
     steps:
       - name: Загрузка репозитория
         uses: actions/checkout@v2
-      - name: Установка настроек окружения
+      - name: Установка ключа для пользователя
+        run: |
+          set -eu
+          mkdir "$HOME/.ssh"
+          echo "${{ secrets.DEPLOY_KEY }}" > "$HOME/.ssh/id_rsa"
+          chmod 600 "$HOME/.ssh/id_rsa"
+      - name: Копирование настроек окружения
         run: |
           echo "${{ secrets.DEPLOY_ENV }}" > ".env"
       - name: Развёртывание приложения
         run: |
-          eval `ssh-agent -s`
-          ssh-add - <<< "${{ secrets.DEPLOY_KEY }}"
           export DOCKER_HOST="ssh://deploy@doka.guide"
           docker ps
           docker-compose --project-directory ./ up --force-recreate --detach 
