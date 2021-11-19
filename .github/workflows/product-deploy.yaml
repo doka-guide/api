@@ -32,6 +32,5 @@ jobs:
           ARTIFACT_PATH="$(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2))"
           docker ps
           export COMPOSE_FILE="$ARTIFACT_PATH/docker-compose.yaml"
-          docker-compose build api
-          docker-compose up --no-deps --detach api
+          docker-compose up --force-recreate --detach api
           docker ps
