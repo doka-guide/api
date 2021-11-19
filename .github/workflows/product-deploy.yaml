@@ -24,9 +24,14 @@ jobs:
         run: |
           ARTIFACT_PATH="$(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2))"
           rsync -e "ssh -i $HOME/.ssh/doka_deploy -o StrictHostKeyChecking=no" --archive --progress --compress --delete . deploy@doka.guide:"$ARTIFACT_PATH"
+      - name: Развёртывание приложения
+        run: |
           eval `ssh-agent -s`
           ssh-add -k "$HOME/.ssh/doka_deploy"
           export DOCKER_HOST="ssh://deploy@doka.guide"
+          ARTIFACT_PATH="$(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2))"
           docker ps
-          docker-compose up --detach --force-recreate --project-directory "$ARTIFACT_PATH/"
+          export COMPOSE_FILE="$ARTIFACT_PATH/docker-compose.yaml"
+          docker-compose build api
+          docker-compose up --no-deps --detach api
           docker ps
