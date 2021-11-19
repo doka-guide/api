@@ -31,5 +31,5 @@ jobs:
           ssh-add -k "$HOME/.ssh/doka_deploy"
           export DOCKER_HOST="ssh://deploy@doka.guide"
           docker ps
-          docker-compose --force-recreate --detach --project-directory "$ARTIFACT_PATH/" up
+          docker-compose --project-directory "$ARTIFACT_PATH/" up --detach --force-recreate
           docker ps
