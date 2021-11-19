@@ -15,6 +15,7 @@ jobs:
         run: |
           set -eu
           mkdir "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh/"
           echo "${{ secrets.DEPLOY_KEY }}" > "$HOME/.ssh/id_rsa"
           chmod 600 "$HOME/.ssh/id_rsa"
       - name: Копирование настроек окружения
