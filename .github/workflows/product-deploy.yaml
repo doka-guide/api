@@ -26,10 +26,9 @@ jobs:
           rsync -e "ssh -i $HOME/.ssh/doka_deploy -o StrictHostKeyChecking=no" --archive --progress --compress --delete . deploy@doka.guide:"$ARTIFACT_PATH"
       - name: Развёртывание приложения
         run: |
-          ARTIFACT_PATH="./"
           eval `ssh-agent -s`
           ssh-add -k "$HOME/.ssh/doka_deploy"
           export DOCKER_HOST="ssh://deploy@doka.guide"
           docker ps
-          docker-compose --force-recreate --detach --project-directory "$ARTIFACT_PATH/" up
+          docker-compose --force-recreate --detach --project-directory ./ up
           docker ps
