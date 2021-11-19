@@ -11,23 +11,13 @@ jobs:
     steps:
       - name: Загрузка репозитория
         uses: actions/checkout@v2
-      - name: Установка ключа для пользователя
-        run: |
-          set -eu
-          mkdir "$HOME/.ssh"
-          echo "${{ secrets.DEPLOY_KEY }}" > "$HOME/.ssh/doka_deploy"
-          chmod 600 "$HOME/.ssh/doka_deploy"
-      - name: Копирование настроек окружения
+      - name: Установка настроек окружения
         run: |
           echo "${{ secrets.DEPLOY_ENV }}" > ".env"
-      - name: Публикация приложения
-        run: |
-          ARTIFACT_PATH="$(echo $(grep 'SERVER_PATH' .env | cut -d '=' -f2))"
-          rsync -e "ssh -i $HOME/.ssh/doka_deploy -o StrictHostKeyChecking=no" --archive --progress --compress --delete . deploy@doka.guide:"$ARTIFACT_PATH"
       - name: Развёртывание приложения
         run: |
           eval `ssh-agent -s`
-          ssh-add -k "$HOME/.ssh/doka_deploy"
+          ssh-add <<< "${{ secrets.DEPLOY_KEY }}"
           export DOCKER_HOST="ssh://deploy@doka.guide"
           docker ps
           docker-compose --project-directory ./ up --force-recreate --detach 
