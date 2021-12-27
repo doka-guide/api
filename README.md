@@ -1,5 +1,7 @@
 # Бэкенд Доки
 
+[![Product Deploy](https://github.com/doka-guide/api/actions/workflows/product-deploy.yaml/badge.svg)](https://github.com/doka-guide/api/actions/workflows/product-deploy.yaml)
+
 Дока — это добрая энциклопедия для веб-разработчиков. Наша цель — сделать документацию по веб-разработке практичной, понятной и не унылой.
 
 Этот репозиторий содержит микросервис (API) для работы с формами на сайте Доки. Данные сохраняются в PostgreSQL.
