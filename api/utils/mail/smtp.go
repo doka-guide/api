@@ -12,7 +12,7 @@ import (
 // SendMail – отправка почты по протоколу SSL/TLS
 func SendMail(toSender string, toAddress string, subj string, body string) error {
 	to := mail.Address{toSender, toAddress}
-	from := mail.Address{"SD Medical Arts", "info@svetlanadanovich.com"}
+	from := mail.Address{os.Getenv("APP_NAME"), os.Getenv("MAIL_USER")}
 
 	// Настройка заголовков письма
 	headers := make(map[string]string)
