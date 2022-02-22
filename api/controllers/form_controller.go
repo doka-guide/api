@@ -6,24 +6,14 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"strconv"
 
 	"github.com/doka-guide/api/api/auth"
 	"github.com/doka-guide/api/api/models"
 	"github.com/doka-guide/api/api/responses"
 	"github.com/doka-guide/api/api/utils/formaterror"
-	"github.com/doka-guide/api/api/utils/mail"
 	"github.com/gorilla/mux"
 )
-
-var users = []models.User{
-	{
-		Nickname: os.Getenv("USER_NAME"),
-		Email:    os.Getenv("USER_MAIL"),
-		Password: os.Getenv("USER_PASS"),
-	},
-}
 
 // CreateForm – Создание записи о новой отправленной форме
 func (server *Server) CreateForm(w http.ResponseWriter, r *http.Request) {
@@ -64,21 +54,10 @@ func (server *Server) CreateForm(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, formCreated.ID))
 	responses.JSON(w, http.StatusCreated, formCreated)
 
-	subject := "Новая форма была заполнена на сайте"
-	emailBody := ""
 	switch form.Type {
 	case "feedback":
 		submittedForm := models.FormFeedback{}
 		err = json.Unmarshal([]byte(form.Data), &submittedForm)
-		if err != nil {
-			responses.ERROR(w, http.StatusUnprocessableEntity, err)
-			return
-		}
-		emailBody = "Тип: Отзыв о статье\n" + submittedForm.ToString()
-	}
-
-	for i := range users {
-		err = mail.SendMail(users[i].Nickname, users[i].Email, subject, emailBody)
 		if err != nil {
 			responses.ERROR(w, http.StatusUnprocessableEntity, err)
 			return
