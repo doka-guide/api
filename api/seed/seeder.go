@@ -8,16 +8,15 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-var users = []models.User{
-	{
-		Nickname: os.Getenv("USER_NAME"),
-		Email:    os.Getenv("USER_MAIL"),
-		Password: os.Getenv("USER_PASS"),
-	},
-}
-
 // Load - loading of the DB
 func Load(db *gorm.DB) {
+	var users = []models.User{
+		{
+			Nickname: os.Getenv("USER_NAME"),
+			Email:    os.Getenv("USER_MAIL"),
+			Password: os.Getenv("USER_PASS"),
+		},
+	}
 
 	if os.Getenv("MODE") == "DEBUG" {
 		err := db.Debug().DropTableIfExists(&models.Form{}, &models.User{}).Error
