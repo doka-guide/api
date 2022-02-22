@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"os"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/doka-guide/api/api/auth"
@@ -18,7 +18,7 @@ import (
 )
 
 var users = []models.User{
-	models.User{
+	{
 		Nickname: os.Getenv("USER_NAME"),
 		Email:    os.Getenv("USER_MAIL"),
 		Password: os.Getenv("USER_PASS"),

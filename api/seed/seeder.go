@@ -9,7 +9,7 @@ import (
 )
 
 var users = []models.User{
-	models.User{
+	{
 		Nickname: os.Getenv("USER_NAME"),
 		Email:    os.Getenv("USER_MAIL"),
 		Password: os.Getenv("USER_PASS"),
