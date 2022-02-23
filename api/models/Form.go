@@ -3,9 +3,9 @@ package models
 import (
 	"errors"
 	"html"
+	"os"
 	"strings"
 	"time"
-	"os"
 
 	"github.com/jinzhu/gorm"
 )
@@ -65,7 +65,7 @@ func (p *Form) SaveForm(db *gorm.DB) (*Form, error) {
 func (p *Form) FindAllForms(db *gorm.DB) (*[]Form, error) {
 	var err error
 	posts := []Form{}
-	err = db.Debug().Model(&Form{}).Limit(os.Getenv("GET_LIMIT")).Find(&posts).Error
+	err = db.Debug().Model(&Form{}).Order("id DESC").Limit(os.Getenv("GET_LIMIT")).Find(&posts).Error
 	if err != nil {
 		return &[]Form{}, err
 	}
