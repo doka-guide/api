@@ -1,3 +1,4 @@
+// Package seed - пакет для установки структуры БД и записей по умолчанию
 package seed
 
 import (

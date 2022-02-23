@@ -1,19 +1,20 @@
+// Package models - пакет для описания моделей, которые используются для хранения данных
 package models
 
 import (
 	"errors"
 	"html"
 	"log"
+	"os"
 	"strings"
 	"time"
-	"os"
 
 	"github.com/badoux/checkmail"
 	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
 )
 
-// Произвольный пользователь
+// User - произвольный пользователь
 type User struct {
 	ID        uint32    `gorm:"primary_key;auto_increment" json:"id"`
 	Nickname  string    `gorm:"size:255;not null;unique" json:"nickname"`
@@ -23,7 +24,7 @@ type User struct {
 	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
 
-// Функция хеширования
+// Hash - функция хеширования
 func Hash(password string) ([]byte, error) {
 	return bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 }
@@ -102,8 +103,7 @@ func (u *User) Validate(action string) error {
 // SaveUser - Сохранение информации о пользователе
 func (u *User) SaveUser(db *gorm.DB) (*User, error) {
 
-	var err error
-	err = db.Debug().Create(&u).Error
+	var err = db.Debug().Create(&u).Error
 	if err != nil {
 		return &User{}, err
 	}
@@ -123,8 +123,7 @@ func (u *User) FindAllUsers(db *gorm.DB) (*[]User, error) {
 
 // FindUserByID - Вывод информации о пользователе с ID
 func (u *User) FindUserByID(db *gorm.DB, uid uint32) (*User, error) {
-	var err error
-	err = db.Debug().Model(User{}).Where("id = ?", uid).Take(&u).Error
+	var err = db.Debug().Model(User{}).Where("id = ?", uid).Take(&u).Error
 	if err != nil {
 		return &User{}, err
 	}

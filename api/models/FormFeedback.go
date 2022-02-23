@@ -1,3 +1,4 @@
+// Package models - пакет для описания моделей, которые используются для хранения данных
 package models
 
 import (
@@ -6,7 +7,7 @@ import (
 
 // FormFeedback – Форма для отзыва пользователя о статье
 type FormFeedback struct {
-	Answer string `json:"answer"`
+	Answer  string `json:"answer"`
 	Article string `json:"article_id"`
 }
 

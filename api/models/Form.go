@@ -1,3 +1,4 @@
+// Package models - пакет для описания моделей, которые используются для хранения данных
 package models
 
 import (
@@ -10,7 +11,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// Произвольная форма
+// Form - произвольная форма
 type Form struct {
 	ID        uint64    `gorm:"primary_key;auto_increment" json:"id"`
 	Type      string    `gorm:"size:255;not null;" json:"type"`

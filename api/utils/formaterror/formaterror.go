@@ -1,3 +1,4 @@
+// Package formaterror - пакет для проверки формата данных
 package formaterror
 
 import (

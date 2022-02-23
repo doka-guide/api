@@ -1,3 +1,4 @@
+// Package responses - пакет для обработки ответов сервера
 package responses
 
 import (

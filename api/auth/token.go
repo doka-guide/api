@@ -1,3 +1,4 @@
+// Package auth - пакет для авторизации пользователей
 package auth
 
 import (

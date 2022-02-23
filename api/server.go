@@ -1,3 +1,4 @@
+// Package api - основной пакет приложения, реализующий функционал REST API
 package api
 
 import (
@@ -15,8 +16,7 @@ var server = controllers.Server{}
 
 func Run() {
 
-	var err error
-	err = godotenv.Load()
+	var err = godotenv.Load()
 	if err != nil {
 		log.Fatalf("Не могу получить доступ к файлу '.env': %v", err)
 	} else {

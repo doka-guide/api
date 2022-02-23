@@ -1,3 +1,4 @@
+// Package middlewares - пакет для промежуточной обработки запросов
 package middlewares
 
 import (

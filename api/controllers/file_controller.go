@@ -1,3 +1,4 @@
+// Package controllers - пакет для обработки данных запросов
 package controllers
 
 import (
