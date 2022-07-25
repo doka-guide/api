@@ -24,7 +24,7 @@ jobs:
           echo "${{ secrets.DEPLOY_ENV }}" > ".env"
       - name: Развёртывание приложения
         run: |
-          ssh-keyscan -H doka.guide >> ~/.ssh/known_hosts
+          ssh-keyscan -H api.doka.guide >> ~/.ssh/known_hosts
           export DOCKER_HOST="ssh://deploy@api.doka.guide"
           docker ps
           docker-compose --project-directory ./ up --force-recreate --detach 
