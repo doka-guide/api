@@ -29,6 +29,14 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/form/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdateForm))).Methods("PUT")
 	s.Router.HandleFunc("/form/{id}", middlewares.SetMiddlewareAuthentication(s.DeleteForm)).Methods("DELETE")
 
+	// Точки входа для сущности Subscription
+	s.Router.HandleFunc("/subscription", middlewares.SetMiddlewareJSON(s.OptionsSubscriptions)).Methods("OPTIONS")
+	s.Router.HandleFunc("/subscription", middlewares.SetMiddlewareJSON(s.CreateSubscription)).Methods("POST")
+	s.Router.HandleFunc("/subscription", middlewares.SetMiddlewareJSON(s.GetSubscriptions)).Methods("GET")
+	s.Router.HandleFunc("/subscription/{id}", middlewares.SetMiddlewareJSON(s.GetSubscription)).Methods("GET")
+	s.Router.HandleFunc("/subscription/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdateSubscription))).Methods("PUT")
+	s.Router.HandleFunc("/subscription/{id}", middlewares.SetMiddlewareAuthentication(s.DeleteSubscription)).Methods("DELETE")
+
 	// Точки входа для сущности File
 	s.Router.HandleFunc("/file", middlewares.SetMiddlewareJSON(s.UploadFile)).Methods("POST")
 }

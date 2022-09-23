@@ -16,15 +16,15 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// CreateForm – Создание записи о новой отправленной форме
-func (server *Server) CreateForm(w http.ResponseWriter, r *http.Request) {
+// CreateSubscription – Создание записи о новой отправленной подписке
+func (server *Server) CreateSubscription(w http.ResponseWriter, r *http.Request) {
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	form := models.Form{}
+	form := models.Subscription{}
 	err = json.Unmarshal(body, &form)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -45,7 +45,7 @@ func (server *Server) CreateForm(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
 		return
 	}
-	formCreated, err := form.SaveForm(server.DB)
+	formCreated, err := form.SaveSubscription(server.DB)
 	if err != nil {
 		formattedError := formaterror.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
@@ -54,33 +54,23 @@ func (server *Server) CreateForm(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, formCreated.ID))
 	responses.JSON(w, http.StatusCreated, formCreated)
-
-	switch form.Type {
-	case "feedback":
-		submittedForm := models.FormFeedback{}
-		err = json.Unmarshal([]byte(form.Data), &submittedForm)
-		if err != nil {
-			responses.ERROR(w, http.StatusUnprocessableEntity, err)
-			return
-		}
-	}
 }
 
-// OptionsForms – Для предварительной загрузки (prefetch)
-func (server *Server) OptionsForms(w http.ResponseWriter, r *http.Request) {
+// OptionsSubscriptions – Для предварительной загрузки (prefetch)
+func (server *Server) OptionsSubscriptions(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, []byte("Request with options has been processed"))
 }
 
-// GetForms – Вывод всех форм
-func (server *Server) GetForms(w http.ResponseWriter, r *http.Request) {
+// GetSubscriptions – Вывод всех форм
+func (server *Server) GetSubscriptions(w http.ResponseWriter, r *http.Request) {
 	_, err := auth.ExtractTokenID(r)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}
 
-	form := models.Form{}
-	forms, err := form.FindAllForms(server.DB)
+	form := models.Subscription{}
+	forms, err := form.FindAllSubscriptions(server.DB)
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
@@ -88,8 +78,8 @@ func (server *Server) GetForms(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, forms)
 }
 
-// GetForm – Вывод формы по ID
-func (server *Server) GetForm(w http.ResponseWriter, r *http.Request) {
+// GetSubscription – Вывод подписки по ID
+func (server *Server) GetSubscription(w http.ResponseWriter, r *http.Request) {
 
 	_, err := auth.ExtractTokenID(r)
 	if err != nil {
@@ -103,9 +93,9 @@ func (server *Server) GetForm(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
-	form := models.Form{}
+	form := models.Subscription{}
 
-	formReceived, err := form.FindFormByID(server.DB, pid)
+	formReceived, err := form.FindSubscriptionByID(server.DB, pid)
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
@@ -113,8 +103,8 @@ func (server *Server) GetForm(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, formReceived)
 }
 
-// UpdateForm – Обновление информации в форме
-func (server *Server) UpdateForm(w http.ResponseWriter, r *http.Request) {
+// UpdateSubscription – Обновление информации в подписке
+func (server *Server) UpdateSubscription(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
@@ -131,11 +121,11 @@ func (server *Server) UpdateForm(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Проверка существования формы
-	form := models.Form{}
-	err = server.DB.Debug().Model(models.Form{}).Where("id = ?", pid).Take(&form).Error
+	// Проверка существования подписки
+	form := models.Subscription{}
+	err = server.DB.Debug().Model(models.Subscription{}).Where("id = ?", pid).Take(&form).Error
 	if err != nil {
-		responses.ERROR(w, http.StatusNotFound, errors.New("Form not found"))
+		responses.ERROR(w, http.StatusNotFound, errors.New("Subscription not found"))
 		return
 	}
 
@@ -144,15 +134,15 @@ func (server *Server) UpdateForm(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}
-	// Чтение данных формы
+	// Чтение данных подписки
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
 
-	// Начало обработки данных формы
-	formUpdate := models.Form{}
+	// Начало обработки данных подписки
+	formUpdate := models.Subscription{}
 	err = json.Unmarshal(body, &formUpdate)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -174,7 +164,7 @@ func (server *Server) UpdateForm(w http.ResponseWriter, r *http.Request) {
 
 	formUpdate.ID = form.ID //this is important to tell the model the form id to update, the other update field are set above
 
-	formUpdated, err := formUpdate.UpdateAForm(server.DB)
+	formUpdated, err := formUpdate.UpdateASubscription(server.DB)
 
 	if err != nil {
 		formattedError := formaterror.FormatError(err.Error())
@@ -184,12 +174,12 @@ func (server *Server) UpdateForm(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, formUpdated)
 }
 
-// DeleteForm – Удаляет данные формы из базы данных
-func (server *Server) DeleteForm(w http.ResponseWriter, r *http.Request) {
+// DeleteSubscription – Удаляет данные подписки из базы данных
+func (server *Server) DeleteSubscription(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
-	// Валидация формы
+	// Валидация подписки
 	pid, err := strconv.ParseUint(vars["id"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
@@ -203,20 +193,20 @@ func (server *Server) DeleteForm(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Проверка наличия формы
-	form := models.Form{}
-	err = server.DB.Debug().Model(models.Form{}).Where("id = ?", pid).Take(&form).Error
+	// Проверка наличия подписки
+	form := models.Subscription{}
+	err = server.DB.Debug().Model(models.Subscription{}).Where("id = ?", pid).Take(&form).Error
 	if err != nil {
 		responses.ERROR(w, http.StatusNotFound, errors.New("Unauthorized"))
 		return
 	}
 
-	// Проверка принадлежности формы пользователю
+	// Проверка принадлежности подписки пользователю
 	if uid != form.AuthorID {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}
-	_, err = form.DeleteAForm(server.DB, pid, uid)
+	_, err = form.DeleteASubscription(server.DB, pid, uid)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
