@@ -11,7 +11,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// Subscription - произвольная форма
+// Subscription - форма подписки
 type Subscription struct {
 	ID        uint64    `gorm:"primary_key;auto_increment" json:"id"`
 	Email     string    `gorm:"size:255;not null;" json:"email"`
