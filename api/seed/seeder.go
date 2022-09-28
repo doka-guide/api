@@ -20,11 +20,11 @@ func Load(db *gorm.DB) {
 	}
 
 	if os.Getenv("MODE") == "DEBUG" {
-		err := db.Debug().DropTableIfExists(&models.Form{}, &models.Subscription{}, &models.User{}).Error
+		err := db.Debug().DropTableIfExists(&models.Form{}, &models.Subscription{}, &models.Link{}, &models.User{}).Error
 		if err != nil {
 			log.Fatalf("cannot drop table: %v", err)
 		}
-		err = db.Debug().AutoMigrate(&models.User{}, &models.Form{}, &models.Subscription{}).Error
+		err = db.Debug().AutoMigrate(&models.User{}, &models.Form{}, &models.Subscription{}, &models.Link{}).Error
 		if err != nil {
 			log.Fatalf("cannot migrate table: %v", err)
 		}
@@ -33,6 +33,10 @@ func Load(db *gorm.DB) {
 			log.Fatalf("attaching foreign key error: %v", err)
 		}
 		err = db.Debug().Model(&models.Subscription{}).AddForeignKey("author_id", "users(id)", "cascade", "cascade").Error
+		if err != nil {
+			log.Fatalf("attaching foreign key error: %v", err)
+		}
+		err = db.Debug().Model(&models.Link{}).AddForeignKey("author_id", "users(id)", "cascade", "cascade").Error
 		if err != nil {
 			log.Fatalf("attaching foreign key error: %v", err)
 		}
