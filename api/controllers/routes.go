@@ -3,40 +3,40 @@ package controllers
 
 import "github.com/doka-guide/api/api/middlewares"
 
-func (s *Server) initializeRoutes() {
+func (server *Server) initializeRoutes() {
 
 	// Точки входа для сущности Home
-	s.Router.HandleFunc("/", middlewares.SetMiddlewareJSON(s.OptionsHome)).Methods("OPTIONS")
-	s.Router.HandleFunc("/", middlewares.SetMiddlewareJSON(s.Home)).Methods("GET")
+	server.Router.HandleFunc("/", middlewares.SetMiddlewareJSON(server.OptionsHome)).Methods("OPTIONS")
+	server.Router.HandleFunc("/", middlewares.SetMiddlewareJSON(server.Home)).Methods("GET")
 
 	// Точки входа для сущности Login
-	s.Router.HandleFunc("/login", middlewares.SetMiddlewareJSON(s.OptionsLogin)).Methods("OPTIONS")
-	s.Router.HandleFunc("/login", middlewares.SetMiddlewareJSON(s.Login)).Methods("POST")
+	server.Router.HandleFunc("/login", middlewares.SetMiddlewareJSON(server.OptionsLogin)).Methods("OPTIONS")
+	server.Router.HandleFunc("/login", middlewares.SetMiddlewareJSON(server.Login)).Methods("POST")
 
 	// Точки входа для сущности User
-	s.Router.HandleFunc("/user", middlewares.SetMiddlewareJSON(s.OptionsUsers)).Methods("OPTIONS")
-	s.Router.HandleFunc("/user", middlewares.SetMiddlewareJSON(s.CreateUser)).Methods("POST")
-	s.Router.HandleFunc("/user", middlewares.SetMiddlewareJSON(s.GetUsers)).Methods("GET")
-	s.Router.HandleFunc("/user/{id}", middlewares.SetMiddlewareJSON(s.GetUser)).Methods("GET")
-	s.Router.HandleFunc("/user/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdateUser))).Methods("PUT")
-	s.Router.HandleFunc("/user/{id}", middlewares.SetMiddlewareAuthentication(s.DeleteUser)).Methods("DELETE")
+	server.Router.HandleFunc("/user", middlewares.SetMiddlewareJSON(server.OptionsUsers)).Methods("OPTIONS")
+	server.Router.HandleFunc("/user", middlewares.SetMiddlewareJSON(server.CreateUser)).Methods("POST")
+	server.Router.HandleFunc("/user", middlewares.SetMiddlewareJSON(server.GetUsers)).Methods("GET")
+	server.Router.HandleFunc("/user/{id}", middlewares.SetMiddlewareJSON(server.GetUser)).Methods("GET")
+	server.Router.HandleFunc("/user/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(server.UpdateUser))).Methods("PUT")
+	server.Router.HandleFunc("/user/{id}", middlewares.SetMiddlewareAuthentication(server.DeleteUser)).Methods("DELETE")
 
 	// Точки входа для сущности Form
-	s.Router.HandleFunc("/form", middlewares.SetMiddlewareJSON(s.OptionsForms)).Methods("OPTIONS")
-	s.Router.HandleFunc("/form", middlewares.SetMiddlewareJSON(s.CreateForm)).Methods("POST")
-	s.Router.HandleFunc("/form", middlewares.SetMiddlewareJSON(s.GetForms)).Methods("GET")
-	s.Router.HandleFunc("/form/{id}", middlewares.SetMiddlewareJSON(s.GetForm)).Methods("GET")
-	s.Router.HandleFunc("/form/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdateForm))).Methods("PUT")
-	s.Router.HandleFunc("/form/{id}", middlewares.SetMiddlewareAuthentication(s.DeleteForm)).Methods("DELETE")
+	server.Router.HandleFunc("/form", middlewares.SetMiddlewareJSON(server.OptionsForms)).Methods("OPTIONS")
+	server.Router.HandleFunc("/form", middlewares.SetMiddlewareJSON(server.CreateForm)).Methods("POST")
+	server.Router.HandleFunc("/form", middlewares.SetMiddlewareJSON(server.GetForms)).Methods("GET")
+	server.Router.HandleFunc("/form/{id}", middlewares.SetMiddlewareJSON(server.GetForm)).Methods("GET")
+	server.Router.HandleFunc("/form/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(server.UpdateForm))).Methods("PUT")
+	server.Router.HandleFunc("/form/{id}", middlewares.SetMiddlewareAuthentication(server.DeleteForm)).Methods("DELETE")
 
 	// Точки входа для сущности Subscription
-	s.Router.HandleFunc("/subscription", middlewares.SetMiddlewareJSON(s.OptionsSubscriptions)).Methods("OPTIONS")
-	s.Router.HandleFunc("/subscription", middlewares.SetMiddlewareJSON(s.CreateSubscription)).Methods("POST")
-	s.Router.HandleFunc("/subscription", middlewares.SetMiddlewareJSON(s.GetSubscriptions)).Methods("GET")
-	s.Router.HandleFunc("/subscription/{id}", middlewares.SetMiddlewareJSON(s.GetSubscription)).Methods("GET")
-	s.Router.HandleFunc("/subscription/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdateSubscription))).Methods("PUT")
-	s.Router.HandleFunc("/subscription/{id}", middlewares.SetMiddlewareAuthentication(s.DeleteSubscription)).Methods("DELETE")
+	server.Router.HandleFunc("/subscription", middlewares.SetMiddlewareJSON(server.OptionsSubscriptions)).Methods("OPTIONS")
+	server.Router.HandleFunc("/subscription", middlewares.SetMiddlewareJSON(server.CreateSubscription)).Methods("POST")
+	server.Router.HandleFunc("/subscription", middlewares.SetMiddlewareJSON(server.GetSubscriptions)).Methods("GET")
+	server.Router.HandleFunc("/subscription/{id}", middlewares.SetMiddlewareJSON(server.GetSubscription)).Methods("GET")
+	server.Router.HandleFunc("/subscription/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(server.UpdateSubscription))).Methods("PUT")
+	server.Router.HandleFunc("/subscription/{id}", middlewares.SetMiddlewareAuthentication(server.DeleteSubscription)).Methods("DELETE")
 
 	// Точки входа для сущности File
-	s.Router.HandleFunc("/file", middlewares.SetMiddlewareJSON(s.UploadFile)).Methods("POST")
+	server.Router.HandleFunc("/file", middlewares.SetMiddlewareJSON(server.UploadFile)).Methods("POST")
 }

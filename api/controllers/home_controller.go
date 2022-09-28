@@ -8,7 +8,7 @@ import (
 	"github.com/doka-guide/api/api/responses"
 )
 
-// API точка входа
+// Home — API точка входа
 func (server *Server) Home(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, os.Getenv("APP_NAME"))
 }
