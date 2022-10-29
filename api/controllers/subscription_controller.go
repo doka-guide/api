@@ -52,9 +52,9 @@ func (server *Server) CreateSubscription(w http.ResponseWriter, r *http.Request)
 		return
 	}
 	profileLinkForm := models.ProfileLink{}
-	profileLinkForm.AuthorID = uid
-	profileLinkForm.ProfileID = uint32(subForm.ID)
 	profileLinkForm.Prepare()
+	profileLinkForm.AuthorID = subForm.AuthorID
+	profileLinkForm.ProfileID = subForm.ID
 	err = profileLinkForm.Validate()
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)

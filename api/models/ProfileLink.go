@@ -20,8 +20,8 @@ type ProfileLink struct {
 	Hash      string       `gorm:"size:255;not null;unique;" json:"hash"`
 	Author    User         `json:"author"`
 	Profile   Subscription `json:"profile"`
-	AuthorID  uint32       `gorm:"not null" json:"author_id"`
-	ProfileID uint32       `gorm:"not null" json:"profile_id"`
+	AuthorID  uint64       `gorm:"not null" json:"author_id"`
+	ProfileID uint64       `gorm:"not null" json:"profile_id"`
 	CreatedAt time.Time    `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt time.Time    `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
@@ -113,12 +113,16 @@ func (p *ProfileLink) FindProfileLinkByHash(db *gorm.DB, hash string) (*ProfileL
 		if err != nil {
 			return &ProfileLink{}, err
 		}
+		err = db.Debug().Model(&Subscription{}).Where("id = ?", p.ProfileID).Take(&p.Profile).Error
+		if err != nil {
+			return &ProfileLink{}, err
+		}
 	}
 	return p, nil
 }
 
 // DeleteAProfileLink - Удаление ссылок на профили подписчиков
-func (p *ProfileLink) DeleteAProfileLink(db *gorm.DB, pid uint64, uid uint32) (int64, error) {
+func (p *ProfileLink) DeleteAProfileLink(db *gorm.DB, pid uint64, uid uint64) (int64, error) {
 	db = db.Debug().Model(&ProfileLink{}).Where("id = ? and author_id = ?", pid, uid).Take(&ProfileLink{}).Delete(&ProfileLink{})
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {

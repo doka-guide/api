@@ -17,7 +17,7 @@ type Form struct {
 	Type      string    `gorm:"size:255;not null;" json:"type"`
 	Data      string    `gorm:"type:JSONB;not null;" json:"data"`
 	Author    User      `json:"author"`
-	AuthorID  uint32    `gorm:"not null" json:"author_id"`
+	AuthorID  uint64    `gorm:"not null" json:"author_id"`
 	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
@@ -114,7 +114,7 @@ func (p *Form) UpdateAForm(db *gorm.DB) (*Form, error) {
 }
 
 // DeleteAForm - Удаление формы
-func (p *Form) DeleteAForm(db *gorm.DB, pid uint64, uid uint32) (int64, error) {
+func (p *Form) DeleteAForm(db *gorm.DB, pid uint64, uid uint64) (int64, error) {
 	db = db.Debug().Model(&Form{}).Where("id = ? and author_id = ?", pid, uid).Take(&Form{}).Delete(&Form{})
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {
