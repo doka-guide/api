@@ -16,15 +16,15 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// CreateLink – Создание ссылки
-func (server *Server) CreateLink(w http.ResponseWriter, r *http.Request) {
+// CreateProfileLink – Создание ссылки
+func (server *Server) CreateProfileLink(w http.ResponseWriter, r *http.Request) {
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	link := models.Link{}
+	link := models.ProfileLink{}
 	err = json.Unmarshal(body, &link)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -45,7 +45,7 @@ func (server *Server) CreateLink(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
 		return
 	}
-	linkCreated, err := link.SaveLink(server.DB)
+	linkCreated, err := link.SaveProfileLink(server.DB)
 	if err != nil {
 		formattedError := formaterror.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
@@ -56,21 +56,21 @@ func (server *Server) CreateLink(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusCreated, linkCreated)
 }
 
-// OptionsLinks – Для предварительной загрузки (prefetch)
-func (server *Server) OptionsLinks(w http.ResponseWriter, r *http.Request) {
+// OptionsProfileLinks – Для предварительной загрузки (prefetch)
+func (server *Server) OptionsProfileLinks(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, []byte("Request with options has been processed"))
 }
 
-// GetLinks – Вывод всех ссылок
-func (server *Server) GetLinks(w http.ResponseWriter, r *http.Request) {
+// GetProfileLinks – Вывод всех ссылок
+func (server *Server) GetProfileLinks(w http.ResponseWriter, r *http.Request) {
 	_, err := auth.ExtractTokenID(r)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}
 
-	link := models.Link{}
-	links, err := link.FindAllLinks(server.DB)
+	link := models.ProfileLink{}
+	links, err := link.FindAllProfileLinks(server.DB)
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
@@ -78,8 +78,8 @@ func (server *Server) GetLinks(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, links)
 }
 
-// GetLink – Вывод ссылки по Hash
-func (server *Server) GetLink(w http.ResponseWriter, r *http.Request) {
+// GetProfileLink – Вывод ссылки по Hash
+func (server *Server) GetProfileLink(w http.ResponseWriter, r *http.Request) {
 
 	_, err := auth.ExtractTokenID(r)
 	if err != nil {
@@ -89,9 +89,9 @@ func (server *Server) GetLink(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 	hash := vars["id"]
-	link := models.Link{}
+	link := models.ProfileLink{}
 
-	linkReceived, err := link.FindLinkByHash(server.DB, hash)
+	linkReceived, err := link.FindProfileLinkByHash(server.DB, hash)
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
@@ -99,8 +99,8 @@ func (server *Server) GetLink(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, linkReceived)
 }
 
-// DeleteLink – Удаляет данные о ссылке из базы данных
-func (server *Server) DeleteLink(w http.ResponseWriter, r *http.Request) {
+// DeleteProfileLink – Удаляет данные о ссылке из базы данных
+func (server *Server) DeleteProfileLink(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
@@ -119,8 +119,8 @@ func (server *Server) DeleteLink(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Проверка наличия подписки
-	link := models.Link{}
-	err = server.DB.Debug().Model(models.Link{}).Where("id = ?", pid).Take(&link).Error
+	link := models.ProfileLink{}
+	err = server.DB.Debug().Model(models.ProfileLink{}).Where("id = ?", pid).Take(&link).Error
 	if err != nil {
 		responses.ERROR(w, http.StatusNotFound, errors.New("Unauthorized"))
 		return
@@ -131,7 +131,7 @@ func (server *Server) DeleteLink(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}
-	_, err = link.DeleteALink(server.DB, pid, uid)
+	_, err = link.DeleteAProfileLink(server.DB, pid, uid)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return

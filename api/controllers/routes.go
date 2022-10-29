@@ -37,12 +37,12 @@ func (server *Server) initializeRoutes() {
 	server.Router.HandleFunc("/subscription/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(server.UpdateSubscription))).Methods("PUT")
 	server.Router.HandleFunc("/subscription/{id}", middlewares.SetMiddlewareAuthentication(server.DeleteSubscription)).Methods("DELETE")
 
-	// Точки входа для сущности Link
-	server.Router.HandleFunc("/link", middlewares.SetMiddlewareJSON(server.OptionsLinks)).Methods("OPTIONS")
-	server.Router.HandleFunc("/link", middlewares.SetMiddlewareJSON(server.CreateLink)).Methods("POST")
-	server.Router.HandleFunc("/link", middlewares.SetMiddlewareJSON(server.GetLinks)).Methods("GET")
-	server.Router.HandleFunc("/link/{id}", middlewares.SetMiddlewareJSON(server.GetLink)).Methods("GET")
-	server.Router.HandleFunc("/link/{id}", middlewares.SetMiddlewareAuthentication(server.DeleteLink)).Methods("DELETE")
+	// Точки входа для сущности ProfileLink
+	server.Router.HandleFunc("/profile-link", middlewares.SetMiddlewareJSON(server.OptionsProfileLinks)).Methods("OPTIONS")
+	server.Router.HandleFunc("/profile-link", middlewares.SetMiddlewareJSON(server.CreateProfileLink)).Methods("POST")
+	server.Router.HandleFunc("/profile-link", middlewares.SetMiddlewareJSON(server.GetProfileLinks)).Methods("GET")
+	server.Router.HandleFunc("/profile-link/{id}", middlewares.SetMiddlewareJSON(server.GetProfileLink)).Methods("GET")
+	server.Router.HandleFunc("/profile-link/{id}", middlewares.SetMiddlewareAuthentication(server.DeleteProfileLink)).Methods("DELETE")
 
 	// Точки входа для сущности File
 	server.Router.HandleFunc("/file", middlewares.SetMiddlewareJSON(server.UploadFile)).Methods("POST")
