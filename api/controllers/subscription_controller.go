@@ -24,14 +24,14 @@ func (server *Server) CreateSubscription(w http.ResponseWriter, r *http.Request)
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	form := models.Subscription{}
-	err = json.Unmarshal(body, &form)
+	subForm := models.Subscription{}
+	err = json.Unmarshal(body, &subForm)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	form.Prepare()
-	err = form.Validate()
+	subForm.Prepare()
+	err = subForm.Validate()
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
@@ -41,19 +41,19 @@ func (server *Server) CreateSubscription(w http.ResponseWriter, r *http.Request)
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}
-	if uid != form.AuthorID {
+	if uid != subForm.AuthorID {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
 		return
 	}
-	formCreated, err := form.SaveSubscription(server.DB)
+	subscription, err := subForm.SaveSubscription(server.DB)
 	if err != nil {
 		formattedError := formaterror.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
 		return
 	}
 
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, formCreated.ID))
-	responses.JSON(w, http.StatusCreated, formCreated)
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, subscription.ID))
+	responses.JSON(w, http.StatusCreated, subscription)
 }
 
 // OptionsSubscriptions – Для предварительной загрузки (prefetch)
