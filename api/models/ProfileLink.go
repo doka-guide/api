@@ -6,11 +6,11 @@ import (
 	"errors"
 	"fmt"
 	"html"
-	"math/rand"
 	"os"
 	"strings"
 	"time"
 
+	"github.com/doka-guide/api/api/utils/randomize"
 	"github.com/jinzhu/gorm"
 )
 
@@ -26,24 +26,11 @@ type ProfileLink struct {
 	UpdatedAt time.Time    `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
 
-const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-const stringLength int = 1024
-
-// getRandomString — генерация строки определённой длинны из случайных символов из набора
-func getStringWithCharset(length int, charset string) string {
-	seededRand := rand.New(rand.NewSource(time.Now().UnixNano()))
-	b := make([]byte, length)
-	for i := range b {
-		b[i] = charset[seededRand.Intn(len(charset))]
-	}
-	return string(b)
-}
-
 // Prepare - Подготовка ссылок на профили подписчиков
 func (p *ProfileLink) Prepare() {
 	p.ID = 0
 	if p.Hash == "" {
-		hash := sha256.Sum256([]byte(getStringWithCharset(stringLength, charset)))
+		hash := sha256.Sum256([]byte(randomize.GetRandomString(1024)))
 		p.Hash = fmt.Sprintf("%x", hash[:])
 	} else {
 		hash := sha256.Sum256([]byte(html.EscapeString(strings.TrimSpace(p.Hash))))

@@ -7,12 +7,15 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
+	"regexp"
 	"strconv"
 
 	"github.com/doka-guide/api/api/auth"
 	"github.com/doka-guide/api/api/models"
 	"github.com/doka-guide/api/api/responses"
 	"github.com/doka-guide/api/api/utils/formaterror"
+	"github.com/doka-guide/api/api/utils/mail"
 	"github.com/gorilla/mux"
 )
 
@@ -70,6 +73,28 @@ func (server *Server) CreateSubscription(w http.ResponseWriter, r *http.Request)
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
 		return
 	}
+
+	hiTxt, err := ioutil.ReadFile(os.Getenv("MAIL_BODY_HI_TEXT"))
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+
+	hiHTML, err := ioutil.ReadFile(os.Getenv("MAIL_BODY_HI_HTML"))
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+	varRegex := regexp.MustCompile(`{{ hash }}`)
+
+	mail.SendMail(
+		"Дорогой участник",
+		subForm.Email,
+		os.Getenv("MAIL_TITLE"),
+		string(varRegex.ReplaceAllString(string(hiTxt), profileLinkForm.Hash)),
+		string(varRegex.ReplaceAllString(string(hiHTML), profileLinkForm.Hash)),
+		false,
+	)
 
 	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, subscription.ID))
 	responses.JSON(w, http.StatusCreated, subscription)
