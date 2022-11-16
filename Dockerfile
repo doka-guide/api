@@ -1,7 +1,6 @@
 ## Build
 
 FROM golang:1.17-alpine AS build
-
 ENV GOPATH /go
 ENV GOBIN $GOPATH/bin
 
@@ -14,13 +13,10 @@ COPY .env /app/
 # Deploy
 
 FROM alpine:latest
-
 ARG APP_PORT
 
+VOLUME /app
 WORKDIR /app
-
 COPY --from=build /app ./
-
 EXPOSE $APP_PORT
-
 ENTRYPOINT ["/app/api"]
