@@ -24,11 +24,8 @@ jobs:
           echo "${{ secrets.DEPLOY_ENV }}" > ".env"
       - name: Развёртывание приложения
         run: |
-          CONTENT_PATH="/web/sites/api.doka.guide/www"
-          PORT="8080"
           ssh-keyscan -H doka.guide >> ~/.ssh/known_hosts
           export DOCKER_HOST="ssh://deploy@dev.doka.guide"
-          docker stop api
-          docker image rm api
-          docker build -t api .
-          docker run -dti --rm -p "$PORT":"$PORT" --name api --mount type=bind,source="$CONTENT_PATH",target=/app/api api
+          docker-compose --project-directory ./ down
+          docker-compose --project-directory ./ build
+          docker-compose --project-directory ./ up
