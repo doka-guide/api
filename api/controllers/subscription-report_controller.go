@@ -24,36 +24,27 @@ func (server *Server) CreateSubscriptionReport(w http.ResponseWriter, r *http.Re
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	link := models.SubscriptionReport{}
-	err = json.Unmarshal(body, &link)
+	report := models.SubscriptionReport{}
+	err = json.Unmarshal(body, &report)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	link.Prepare()
-	err = link.Validate()
+	report.Prepare()
+	err = report.Validate()
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	uid, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
-	if uid != link.AuthorID {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
-		return
-	}
-	linkCreated, err := link.SaveSubscriptionReport(server.DB)
+	reportCreated, err := report.SaveSubscriptionReport(server.DB)
 	if err != nil {
 		formattedError := formaterror.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
 		return
 	}
 
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, linkCreated.ID))
-	responses.JSON(w, http.StatusCreated, linkCreated)
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, reportCreated.ID))
+	responses.JSON(w, http.StatusCreated, reportCreated)
 }
 
 // OptionsSubscriptionReports – Для предварительной загрузки (prefetch)
@@ -69,13 +60,13 @@ func (server *Server) GetSubscriptionReports(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	link := models.SubscriptionReport{}
-	links, err := link.FindAllSubscriptionReports(server.DB)
+	report := models.SubscriptionReport{}
+	reports, err := report.FindAllSubscriptionReports(server.DB)
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
-	responses.JSON(w, http.StatusOK, links)
+	responses.JSON(w, http.StatusOK, reports)
 }
 
 // GetSubscriptionReport – Вывод отчёта о загрузке ссылки по Hash
@@ -89,14 +80,14 @@ func (server *Server) GetSubscriptionReport(w http.ResponseWriter, r *http.Reque
 
 	vars := mux.Vars(r)
 	path := vars["id"]
-	link := models.SubscriptionReport{}
+	report := models.SubscriptionReport{}
 
-	linkReceived, err := link.FindSubscriptionReportByPath(server.DB, path)
+	reportReceived, err := report.FindSubscriptionReportByPath(server.DB, path)
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
-	responses.JSON(w, http.StatusOK, linkReceived)
+	responses.JSON(w, http.StatusOK, reportReceived)
 }
 
 // DeleteSubscriptionReport – Удаляет данные о отчёта о загрузке ссылке из базы данных
@@ -119,19 +110,19 @@ func (server *Server) DeleteSubscriptionReport(w http.ResponseWriter, r *http.Re
 	}
 
 	// Проверка наличия подписки
-	link := models.SubscriptionReport{}
-	err = server.DB.Debug().Model(models.SubscriptionReport{}).Where("id = ?", pid).Take(&link).Error
+	report := models.SubscriptionReport{}
+	err = server.DB.Debug().Model(models.SubscriptionReport{}).Where("id = ?", pid).Take(&report).Error
 	if err != nil {
 		responses.ERROR(w, http.StatusNotFound, errors.New("Unauthorized"))
 		return
 	}
 
 	// Проверка принадлежности подписки пользователю
-	if uid != link.AuthorID {
+	if uid != report.Profile.AuthorID {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}
-	_, err = link.DeleteASubscriptionReport(server.DB, pid, uid)
+	_, err = report.DeleteASubscriptionReport(server.DB, pid, uid)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return

@@ -13,9 +13,7 @@ import (
 type SubscriptionReport struct {
 	ID        uint64       `gorm:"primary_key;auto_increment" json:"id"`
 	Path      string       `gorm:"size:255;not null;" json:"path"`
-	Author    User         `json:"author"`
 	Profile   Subscription `json:"profile"`
-	AuthorID  uint64       `gorm:"not null" json:"author_id"`
 	ProfileID uint64       `gorm:"not null" json:"profile_id"`
 	CreatedAt time.Time    `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt time.Time    `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
@@ -25,7 +23,6 @@ type SubscriptionReport struct {
 func (p *SubscriptionReport) Prepare() {
 	p.ID = 0
 	p.Profile = Subscription{}
-	p.Author = User{}
 	p.CreatedAt = time.Now()
 	p.UpdatedAt = time.Now()
 }
@@ -34,9 +31,6 @@ func (p *SubscriptionReport) Prepare() {
 func (p *SubscriptionReport) Validate() error {
 	if p.Path == "" {
 		return errors.New("Необходимо указать ссылку к ресурсу")
-	}
-	if p.AuthorID < 1 {
-		return errors.New("Необходимо указать ID пользователя")
 	}
 	return nil
 }
@@ -47,12 +41,6 @@ func (p *SubscriptionReport) SaveSubscriptionReport(db *gorm.DB) (*SubscriptionR
 	err = db.Debug().Model(&SubscriptionReport{}).Create(&p).Error
 	if err != nil {
 		return &SubscriptionReport{}, err
-	}
-	if p.ID != 0 {
-		err = db.Debug().Model(&User{}).Where("id = ?", p.AuthorID).Take(&p.Author).Error
-		if err != nil {
-			return &SubscriptionReport{}, err
-		}
 	}
 	return p, nil
 }
@@ -65,14 +53,6 @@ func (p *SubscriptionReport) FindAllSubscriptionReports(db *gorm.DB) (*[]Subscri
 	if err != nil {
 		return &[]SubscriptionReport{}, err
 	}
-	if len(posts) > 0 {
-		for i := range posts {
-			err := db.Debug().Model(&User{}).Where("id = ?", posts[i].AuthorID).Take(&posts[i].Author).Error
-			if err != nil {
-				return &[]SubscriptionReport{}, err
-			}
-		}
-	}
 	return &posts, nil
 }
 
@@ -84,10 +64,6 @@ func (p *SubscriptionReport) FindSubscriptionReportByPath(db *gorm.DB, path stri
 		return &SubscriptionReport{}, err
 	}
 	if p.ID != 0 {
-		err = db.Debug().Model(&User{}).Where("id = ?", p.AuthorID).Take(&p.Author).Error
-		if err != nil {
-			return &SubscriptionReport{}, err
-		}
 		err = db.Debug().Model(&Subscription{}).Where("id = ?", p.ProfileID).Take(&p.Profile).Error
 		if err != nil {
 			return &SubscriptionReport{}, err
