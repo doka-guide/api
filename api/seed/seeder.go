@@ -20,11 +20,11 @@ func Load(db *gorm.DB) {
 	}
 
 	if os.Getenv("MODE") == "DEBUG" {
-		err := db.Debug().DropTableIfExists(&models.Form{}, &models.ProfileLink{}, &models.Subscription{}, &models.User{}).Error
+		err := db.Debug().DropTableIfExists(&models.Form{}, &models.ProfileLink{}, &models.SubscriptionReport{}, &models.Subscription{}, &models.User{}).Error
 		if err != nil {
 			log.Fatalf("cannot drop table: %v", err)
 		}
-		err = db.Debug().AutoMigrate(&models.User{}, &models.Subscription{}, &models.ProfileLink{}, &models.Form{}).Error
+		err = db.Debug().AutoMigrate(&models.User{}, &models.Subscription{}, &models.ProfileLink{}, &models.SubscriptionReport{}, &models.Form{}).Error
 		if err != nil {
 			log.Fatalf("cannot migrate table: %v", err)
 		}
@@ -43,6 +43,14 @@ func Load(db *gorm.DB) {
 		err = db.Debug().Model(&models.ProfileLink{}).AddForeignKey("profile_id", "subscriptions(id)", "cascade", "cascade").Error
 		if err != nil {
 			log.Fatalf("attaching foreign key error (profileLinks -> subscriptions): %v", err)
+		}
+		err = db.Debug().Model(&models.SubscriptionReport{}).AddForeignKey("author_id", "users(id)", "cascade", "cascade").Error
+		if err != nil {
+			log.Fatalf("attaching foreign key error (subscriptionreport -> users): %v", err)
+		}
+		err = db.Debug().Model(&models.SubscriptionReport{}).AddForeignKey("profile_id", "subscriptions(id)", "cascade", "cascade").Error
+		if err != nil {
+			log.Fatalf("attaching foreign key error (subscriptionreport -> subscriptions): %v", err)
 		}
 		for i := range users {
 			err = db.Debug().Model(&models.User{}).Create(&users[i]).Error

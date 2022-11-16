@@ -44,6 +44,13 @@ func (server *Server) initializeRoutes() {
 	server.Router.HandleFunc("/profile-link/{id}", middlewares.SetMiddlewareJSON(server.GetProfileLink)).Methods("GET")
 	server.Router.HandleFunc("/profile-link/{id}", middlewares.SetMiddlewareAuthentication(server.DeleteProfileLink)).Methods("DELETE")
 
+	// Точки входа для сущности SubscriptionReport
+	server.Router.HandleFunc("/subscription-report", middlewares.SetMiddlewareJSON(server.OptionsProfileLinks)).Methods("OPTIONS")
+	server.Router.HandleFunc("/subscription-report", middlewares.SetMiddlewareJSON(server.CreateProfileLink)).Methods("POST")
+	server.Router.HandleFunc("/subscription-report", middlewares.SetMiddlewareJSON(server.GetProfileLinks)).Methods("GET")
+	server.Router.HandleFunc("/subscription-report/{id}", middlewares.SetMiddlewareJSON(server.GetProfileLink)).Methods("GET")
+	server.Router.HandleFunc("/subscription-report/{id}", middlewares.SetMiddlewareAuthentication(server.DeleteProfileLink)).Methods("DELETE")
+
 	// Точки входа для сущности File
 	server.Router.HandleFunc("/file", middlewares.SetMiddlewareJSON(server.UploadFile)).Methods("POST")
 }
