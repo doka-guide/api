@@ -25,6 +25,7 @@ jobs:
       - name: Развёртывание приложения
         run: |
           CONTENT_PATH="/web/sites/api.doka.guide/www"
+          PORT="8080"
           ssh-keyscan -H doka.guide >> ~/.ssh/known_hosts
           export DOCKER_HOST="ssh://deploy@dev.doka.guide"
           docker stop api
