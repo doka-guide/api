@@ -20,6 +20,10 @@ services:
         APP_PORT: ${APP_PORT}
     ports:
       - "${APP_PORT}:${APP_PORT}"
+    volumes:
+      - type: bind
+        source: /web/sites/api.doka.guide/www
+        target: ./
     depends_on:
       - db
     
