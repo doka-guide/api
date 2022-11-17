@@ -15,7 +15,6 @@ COPY .env /app/
 FROM alpine:latest
 ARG APP_PORT
 
-VOLUME /app
 WORKDIR /app
 COPY --from=build /app ./
 EXPOSE $APP_PORT

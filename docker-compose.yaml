@@ -23,7 +23,7 @@ services:
     volumes:
       - type: bind
         source: /web/sites/api.doka.guide/www
-        target: /app
+        target: /email
     depends_on:
       - db
     
