@@ -25,8 +25,6 @@ jobs:
       - name: Развёртывание приложения
         run: |
           ssh-keyscan -H api.doka.guide >> ~/.ssh/known_hosts
-          ssh deploy@api.doka.guide cd /web/repos/api/
-          ssh deploy@api.doka.guide git pull
-          ssh deploy@api.doka.guide docker-compose --project-directory ./ up --detach
+          ssh deploy@api.doka.guide cd /web/repos/api/ && git pull && docker-compose --project-directory ./ up --detach
           ssh deploy@api.doka.guide docker ps
           ssh deploy@api.doka.guide docker ls
