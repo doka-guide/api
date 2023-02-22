@@ -28,4 +28,4 @@ jobs:
           export DOCKER_HOST="ssh://deploy@api.doka.guide"
           docker-compose --project-directory ./ down
           docker-compose --project-directory ./ build
-          docker-compose --project-directory ./ up
+          docker-compose --detach --project-directory ./ up
