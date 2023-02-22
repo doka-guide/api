@@ -44,7 +44,7 @@ func Load(db *gorm.DB) {
 		if err != nil {
 			log.Fatalf("attaching foreign key error (profileLinks -> subscriptions): %v", err)
 		}
-		err = db.Debug().Model(&models.SubscriptionReport{}).AddForeignKey("author_id", "users(id)", "cascade", "cascade").Error
+		err = db.Debug().Model(&models.SubscriptionReport{}).AddForeignKey("profile_id", "subscriptions(id)", "cascade", "cascade").Error
 		if err != nil {
 			log.Fatalf("attaching foreign key error (subscriptionreport -> users): %v", err)
 		}
