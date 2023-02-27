@@ -25,4 +25,4 @@ jobs:
       - name: Развёртывание приложения
         run: |
           ssh-keyscan -H api.doka.guide >> ~/.ssh/known_hosts
-          ssh deploy@api.doka.guide 'cd /web/repos/api/ && git pull && sh start.sh'
+          ssh deploy@api.doka.guide 'cd /web/repos/api/ && git pull --rebase && sh start.sh'
