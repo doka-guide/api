@@ -52,7 +52,7 @@ func SendMail(toSender string, toAddress string, subj string, textBody string, h
 	headers["Content-Transfer-Encoding"] = "quoted-printable"
 	headers["Content-Disposition"] = "inline"
 
-	message += "\r\n" + "--plain" + boundary + "\r\n"
+	message += "\r\n" + "--" + boundary + "\r\n"
 	for k, v := range headers {
 		message += fmt.Sprintf("%s: %s\r\n", k, v)
 		delete(headers, k)
