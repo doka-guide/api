@@ -74,11 +74,7 @@ func (server *Server) CreateSubscription(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	hiImages, err := ioutil.ReadFile(os.Getenv("MAIL_IMAGES_HI_HTML"))
-	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
-		return
-	}
+	hiImages := os.Getenv("MAIL_IMAGES_HI_HTML")
 	imagesRegex := regexp.MustCompile(`\.\/images`)
 
 	hiTxt, err := ioutil.ReadFile(os.Getenv("MAIL_BODY_HI_TEXT"))
