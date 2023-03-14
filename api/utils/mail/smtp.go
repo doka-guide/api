@@ -49,7 +49,7 @@ func SendMail(toSender string, toAddress string, subj string, textBody string, h
 
 	// Формирование текстовой части сообщения
 	headers["Content-Type"] = "text/plain; charset=utf-8"
-	headers["Content-Transfer-Encoding"] = "quoted-printable"
+	headers["Content-Transfer-Encoding"] = "8bit"
 	headers["Content-Disposition"] = "inline"
 
 	message += "\r\n" + "--" + boundary + "\r\n"
@@ -61,7 +61,7 @@ func SendMail(toSender string, toAddress string, subj string, textBody string, h
 
 	// Формирование HTML части сообщения
 	headers["Content-Type"] = "text/html; charset=\"utf-8\""
-	headers["Content-Transfer-Encoding"] = "quoted-printable"
+	headers["Content-Transfer-Encoding"] = "8bit"
 	headers["Content-Disposition"] = "inline"
 
 	message += "\r\n" + "--" + boundary + "\r\n"
