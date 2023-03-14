@@ -79,7 +79,7 @@ func (server *Server) CreateSubscription(w http.ResponseWriter, r *http.Request)
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	imagesRegex := regexp.MustCompile(`./images`)
+	imagesRegex := regexp.MustCompile(`\.\/images`)
 
 	hiTxt, err := ioutil.ReadFile(os.Getenv("MAIL_BODY_HI_TEXT"))
 	if err != nil {
