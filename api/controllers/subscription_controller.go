@@ -74,6 +74,13 @@ func (server *Server) CreateSubscription(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	hiImages, err := ioutil.ReadFile(os.Getenv("MAIL_IMAGES_HI_HTML"))
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+	imagesRegex := regexp.MustCompile((`./images`))
+
 	hiTxt, err := ioutil.ReadFile(os.Getenv("MAIL_BODY_HI_TEXT"))
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -92,7 +99,10 @@ func (server *Server) CreateSubscription(w http.ResponseWriter, r *http.Request)
 		subForm.Email,
 		os.Getenv("MAIL_TITLE"),
 		string(varRegex.ReplaceAllString(string(hiTxt), profileLinkForm.Hash)),
-		string(varRegex.ReplaceAllString(string(hiHTML), profileLinkForm.Hash)),
+		string(imagesRegex.ReplaceAllString(
+			string(varRegex.ReplaceAllString(string(hiHTML), profileLinkForm.Hash)),
+			string(hiImages),
+		)),
 		false,
 	)
 
