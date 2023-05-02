@@ -127,7 +127,7 @@ func (p *Form) DeleteAForm(db *gorm.DB, pid uint64, uid uint64) (int64, error) {
 
 type FormsGroupedByDataResult struct {
 	Data  string `gorm:"type:JSONB;not null;" json:"data"`
-	Count int    `gorm:"not null" json:"id"`
+	Count int    `gorm:"not null" json:"count"`
 }
 
 // FeedbackFormsGroupedByData - Вывод агрегированных данных по лайкам / замечаниям для материалов
