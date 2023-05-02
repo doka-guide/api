@@ -124,3 +124,15 @@ func (p *Form) DeleteAForm(db *gorm.DB, pid uint64, uid uint64) (int64, error) {
 	}
 	return db.RowsAffected, nil
 }
+
+type FormsGroupedByDataResult struct {
+	Data  string `json:"data"`
+	Count int    `json:"id"`
+}
+
+// FeedbackFormsGroupedByData - Вывод агрегированных данных по лайкам / замечаниям для материалов
+func (p *Form) FeedbackFormsGroupedByData(db *gorm.DB, start string, end string) *[]FormsGroupedByDataResult {
+	posts := []FormsGroupedByDataResult{}
+	db.Raw("SELECT (data,count(data)) FROM forms WHERE type = 'feedback' AND created_at >= ? AND created_at <= ? GROUP BY data", start, end).Scan(&posts)
+	return &posts
+}
