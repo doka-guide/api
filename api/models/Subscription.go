@@ -124,3 +124,16 @@ func (p *Subscription) DeleteASubscription(db *gorm.DB, pid uint64, uid uint64) 
 	}
 	return db.RowsAffected, nil
 }
+
+type SubscriptionFormsWithHashResult struct {
+	Email string `json:"email"`
+	Hash  string `json:"hash"`
+	Data  string `json:"data"`
+}
+
+// SubscriptionFormsWithHash - Вывод адресов электронной почты и настроек с указанием хэша
+func (p *Form) SubscriptionFormsWithHash(db *gorm.DB, start string, end string) *[]SubscriptionFormsWithHashResult {
+	posts := []SubscriptionFormsWithHashResult{}
+	db.Raw("SELECT (email,hash,data) FROM subscriptions JOIN profile_links ON subscriptions.id=profile_links.profile_id WHERE subscriptions.created_at >= ? AND subscriptions.created_at <= ? ORDER BY subscriptions.created_at ASC", start, end).Scan(&posts)
+	return &posts
+}

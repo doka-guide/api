@@ -264,3 +264,20 @@ func (server *Server) DeleteSubscription(w http.ResponseWriter, r *http.Request)
 	w.Header().Set("Entity", fmt.Sprintf("%d", pid))
 	responses.JSON(w, http.StatusNoContent, "")
 }
+
+// GetSubscriptionFormsWithHash – Вывод адресов электронной почты и настроек с указанием хэша
+func (server *Server) GetSubscriptionFormsWithHash(w http.ResponseWriter, r *http.Request) {
+	_, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
+	vars := mux.Vars(r)
+	start := vars["start"]
+	end := vars["end"]
+
+	form := models.Form{}
+	report := form.SubscriptionFormsWithHash(server.DB, start, end)
+	responses.JSON(w, http.StatusOK, report)
+}
