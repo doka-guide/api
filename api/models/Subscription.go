@@ -126,9 +126,9 @@ func (p *Subscription) DeleteASubscription(db *gorm.DB, pid uint64, uid uint64) 
 }
 
 type SubscriptionFormsWithHashResult struct {
-	Email string `json:"email"`
-	Hash  string `json:"hash"`
-	Data  string `json:"data"`
+	Email string `gorm:"size:255;not null;" json:"email"`
+	Hash  string `gorm:"size:255;not null;unique;" json:"hash"`
+	Data  string `gorm:"type:JSONB;not null;" json:"data"`
 }
 
 // SubscriptionFormsWithHash - Вывод адресов электронной почты и настроек с указанием хэша
