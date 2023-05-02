@@ -133,7 +133,7 @@ type FormsGroupedByDataResult struct {
 // FeedbackFormsGroupedByData - Вывод агрегированных данных по лайкам / замечаниям для материалов
 func (p *Form) FeedbackFormsGroupedByData(db *gorm.DB, start string, end string) *[]FormsGroupedByDataResult {
 	posts := []FormsGroupedByDataResult{}
-	db.Raw("SELECT (data,count(data)) FROM forms WHERE type = 'feedback' AND created_at >= ? AND created_at <= ? GROUP BY data", start, end).Scan(&posts)
+	db.Raw("SELECT data, count(data) FROM forms WHERE type = 'feedback' AND created_at >= ? AND created_at <= ? GROUP BY data", start, end).Scan(&posts)
 	return &posts
 }
 
