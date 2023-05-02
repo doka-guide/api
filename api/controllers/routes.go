@@ -28,6 +28,8 @@ func (server *Server) initializeRoutes() {
 	server.Router.HandleFunc("/form/{id}", middlewares.SetMiddlewareJSON(server.GetForm)).Methods("GET")
 	server.Router.HandleFunc("/form/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(server.UpdateForm))).Methods("PUT")
 	server.Router.HandleFunc("/form/{id}", middlewares.SetMiddlewareAuthentication(server.DeleteForm)).Methods("DELETE")
+	server.Router.HandleFunc("/form/feedback", middlewares.SetMiddlewareJSON(server.GetFeedbackForms)).Methods("GET")
+	server.Router.HandleFunc("/form/question", middlewares.SetMiddlewareJSON(server.GetQuestionForms)).Methods("GET")
 
 	// Точки входа для сущности Subscription
 	server.Router.HandleFunc("/subscription", middlewares.SetMiddlewareJSON(server.OptionsSubscriptions)).Methods("OPTIONS")
@@ -36,6 +38,7 @@ func (server *Server) initializeRoutes() {
 	server.Router.HandleFunc("/subscription/{id}", middlewares.SetMiddlewareJSON(server.GetSubscription)).Methods("GET")
 	server.Router.HandleFunc("/subscription/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(server.UpdateSubscription))).Methods("PUT")
 	server.Router.HandleFunc("/subscription/{id}", middlewares.SetMiddlewareAuthentication(server.DeleteSubscription)).Methods("DELETE")
+	server.Router.HandleFunc("/subscription/report", middlewares.SetMiddlewareJSON(server.GetSubscriptionFormsWithHash)).Methods("GET")
 
 	// Точки входа для сущности ProfileLink
 	server.Router.HandleFunc("/profile-link", middlewares.SetMiddlewareJSON(server.OptionsProfileLinks)).Methods("OPTIONS")
