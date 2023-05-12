@@ -2,6 +2,7 @@
 package controllers
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -12,8 +13,19 @@ import (
 	// Драйвер для работы с PostgreSQL
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 
+	"github.com/doka-guide/api/api/auth"
 	"github.com/doka-guide/api/api/models"
+	"github.com/doka-guide/api/api/responses"
 )
+
+func GetUserIdByToken(w http.ResponseWriter, r *http.Request) uint64 {
+	uid, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return 0
+	}
+	return uid
+}
 
 // Объект Сервер
 type Server struct {

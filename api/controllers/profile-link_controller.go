@@ -35,15 +35,10 @@ func (server *Server) CreateProfileLink(w http.ResponseWriter, r *http.Request) 
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	uid, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
-	if uid != link.AuthorID {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
-		return
-	}
+
+	// Проверка авторизации
+	GetUserIdByToken(w, r)
+
 	linkCreated, err := link.SaveProfileLink(server.DB)
 	if err != nil {
 		formattedError := formaterror.FormatError(err.Error())
@@ -109,11 +104,7 @@ func (server *Server) DeleteProfileLink(w http.ResponseWriter, r *http.Request) 
 	}
 
 	// Проверка авторизации
-	uid, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
+	uid := GetUserIdByToken(w, r)
 
 	// Проверка наличия подписки
 	link := models.ProfileLink{}

@@ -100,11 +100,7 @@ func (server *Server) DeleteSubscriptionReport(w http.ResponseWriter, r *http.Re
 	}
 
 	// Проверка авторизации
-	uid, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
+	uid := GetUserIdByToken(w, r)
 
 	// Проверка наличия подписки
 	report := models.SubscriptionReport{}

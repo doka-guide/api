@@ -38,11 +38,10 @@ func (server *Server) CreateSubscription(w http.ResponseWriter, r *http.Request)
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	uid, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
+
+	// Проверка авторизации
+	uid := GetUserIdByToken(w, r)
+
 	if uid != subForm.AuthorID {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
 		return
@@ -162,11 +161,8 @@ func (server *Server) UpdateSubscription(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	uid, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
+	// Проверка авторизации
+	uid := GetUserIdByToken(w, r)
 
 	// Проверка существования подписки
 	form := models.Subscription{}
@@ -232,11 +228,7 @@ func (server *Server) DeleteSubscription(w http.ResponseWriter, r *http.Request)
 	}
 
 	// Проверка авторизации
-	uid, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
+	uid := GetUserIdByToken(w, r)
 
 	// Проверка наличия подписки
 	form := models.Subscription{}

@@ -35,15 +35,10 @@ func (server *Server) CreateForm(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	uid, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
-	if uid != form.AuthorID {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
-		return
-	}
+
+	// Проверка авторизации
+	GetUserIdByToken(w, r)
+
 	formCreated, err := form.SaveForm(server.DB)
 	if err != nil {
 		formattedError := formaterror.FormatError(err.Error())
@@ -122,11 +117,7 @@ func (server *Server) UpdateForm(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	uid, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
+	uid := GetUserIdByToken(w, r)
 
 	// Проверка существования формы
 	form := models.Form{}
@@ -192,11 +183,7 @@ func (server *Server) DeleteForm(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Проверка авторизации
-	uid, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
+	uid := GetUserIdByToken(w, r)
 
 	// Проверка наличия формы
 	form := models.Form{}
