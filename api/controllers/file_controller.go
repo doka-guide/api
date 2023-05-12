@@ -84,7 +84,9 @@ func (server *Server) UploadFile(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
-	defer newFile.Close() // Закрывает файл после записи
+
+	// Закрывает файл после записи
+	defer newFile.Close()
 	if _, err := newFile.Write(fileBytes); err != nil || newFile.Close() != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return

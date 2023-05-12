@@ -1,4 +1,4 @@
-// Package middlewares - пакет для промежуточной обработки запросов
+// Package middlewares - пакет посредника для промежуточной обработки запросов
 package middlewares
 
 import (
@@ -9,7 +9,7 @@ import (
 	"github.com/doka-guide/api/api/responses"
 )
 
-// SetMiddlewareJSON – setup of middleware for HTTP response
+// SetMiddlewareJSON – Настройка посредника для обработки запросов
 func SetMiddlewareJSON(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if origin := r.Header.Get("Origin"); origin != "" {
@@ -23,7 +23,7 @@ func SetMiddlewareJSON(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-// SetMiddlewareAuthentication - setup authentication of the user
+// SetMiddlewareAuthentication - Настройки аутентификации пользователей
 func SetMiddlewareAuthentication(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		err := auth.TokenValid(r)

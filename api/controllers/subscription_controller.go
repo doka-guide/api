@@ -155,7 +155,7 @@ func (server *Server) GetSubscription(w http.ResponseWriter, r *http.Request) {
 func (server *Server) UpdateSubscription(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	// Check if the form id is valid
+	// Валидация информации о подписке
 	pid, err := strconv.ParseUint(vars["id"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
@@ -209,8 +209,7 @@ func (server *Server) UpdateSubscription(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	formUpdate.ID = form.ID //this is important to tell the model the form id to update, the other update field are set above
-
+	formUpdate.ID = form.ID
 	formUpdated, err := formUpdate.UpdateASubscription(server.DB)
 
 	if err != nil {

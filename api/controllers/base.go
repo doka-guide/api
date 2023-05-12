@@ -9,18 +9,19 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 
-	_ "github.com/jinzhu/gorm/dialects/postgres" //postgres database driver
+	// Драйвер для работы с PostgreSQL
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 
 	"github.com/doka-guide/api/api/models"
 )
 
-// Server object
+// Объект Сервер
 type Server struct {
 	DB     *gorm.DB
 	Router *mux.Router
 }
 
-// Initialize Server
+// Инициализация сервера
 func (server *Server) Initialize(Dbdriver, DBUser, DBPassword, DBPort, DBHost, DBName string) {
 	var err error
 	if Dbdriver == "postgres" {
@@ -34,12 +35,13 @@ func (server *Server) Initialize(Dbdriver, DBUser, DBPassword, DBPort, DBHost, D
 		}
 	}
 
-	server.DB.Debug().AutoMigrate(&models.User{}) //database migration
+	// Миграция базы данных
+	server.DB.Debug().AutoMigrate(&models.User{})
 	server.Router = mux.NewRouter()
 	server.initializeRoutes()
 }
 
-// Run Server
+// Запуск сервера
 func (server *Server) Run(addr string) {
 	fmt.Println("Запустился на хосте", addr)
 	log.Fatal(http.ListenAndServe(addr, server.Router))
