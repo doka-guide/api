@@ -52,7 +52,9 @@ func (server *Server) OptionsSubscriptionReports(w http.ResponseWriter, r *http.
 
 // GetSubscriptionReports – Вывод всех отчёта о загрузке ссылок
 func (server *Server) GetSubscriptionReports(w http.ResponseWriter, r *http.Request) {
-	GetUserIDByToken(w, r)
+	if CheckPermission(GetUserIDByToken(w, r), "SUBSCRIPTION-REPORT-GET") {
+		return
+	}
 
 	report := models.SubscriptionReport{}
 	reports, err := report.FindAllSubscriptionReports(server.DB)
@@ -65,7 +67,9 @@ func (server *Server) GetSubscriptionReports(w http.ResponseWriter, r *http.Requ
 
 // GetSubscriptionReport – Вывод отчёта о загрузке ссылки по Hash
 func (server *Server) GetSubscriptionReport(w http.ResponseWriter, r *http.Request) {
-	GetUserIDByToken(w, r)
+	if CheckPermission(GetUserIDByToken(w, r), "SUBSCRIPTION-REPORT-GET") {
+		return
+	}
 
 	vars := mux.Vars(r)
 	path := vars["id"]
@@ -92,6 +96,9 @@ func (server *Server) DeleteSubscriptionReport(w http.ResponseWriter, r *http.Re
 
 	// Проверка авторизации
 	uid := GetUserIDByToken(w, r)
+	if CheckPermission(uid, "SUBSCRIPTION-REPORT-DELETE") {
+		return
+	}
 
 	// Проверка наличия подписки
 	report := models.SubscriptionReport{}

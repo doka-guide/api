@@ -36,7 +36,7 @@ func (server *Server) CreateProfileLink(w http.ResponseWriter, r *http.Request) 
 	}
 
 	// Проверка авторизации
-	if GetUserIDByToken(w, r) == 0 {
+	if CheckPermission(GetUserIDByToken(w, r), "PROFILE-LINK-POST") {
 		return
 	}
 
@@ -58,7 +58,7 @@ func (server *Server) OptionsProfileLinks(w http.ResponseWriter, r *http.Request
 
 // GetProfileLinks – Вывод всех ссылок
 func (server *Server) GetProfileLinks(w http.ResponseWriter, r *http.Request) {
-	if GetUserIDByToken(w, r) == 0 {
+	if CheckPermission(GetUserIDByToken(w, r), "PROFILE-LINK-GET") {
 		return
 	}
 
@@ -73,7 +73,7 @@ func (server *Server) GetProfileLinks(w http.ResponseWriter, r *http.Request) {
 
 // GetProfileLink – Вывод ссылки по Hash
 func (server *Server) GetProfileLink(w http.ResponseWriter, r *http.Request) {
-	if GetUserIDByToken(w, r) == 0 {
+	if CheckPermission(GetUserIDByToken(w, r), "PROFILE-LINK-GET") {
 		return
 	}
 
@@ -102,7 +102,7 @@ func (server *Server) DeleteProfileLink(w http.ResponseWriter, r *http.Request) 
 
 	// Проверка авторизации
 	uid := GetUserIDByToken(w, r)
-	if uid == 0 {
+	if CheckPermission(uid, "PROFILE-LINK-DELETE") {
 		return
 	}
 

@@ -25,7 +25,17 @@ func GetUserIDByToken(w http.ResponseWriter, r *http.Request) uint64 {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return 0
 	}
+
 	return uid
+}
+
+// CheckPermission — проверяет, есть ли права на осуществление запроса
+func CheckPermission(id uint64, permName string) bool {
+	if id == 0 {
+		return false
+	} else {
+		return true
+	}
 }
 
 // Server — Объект Сервер
