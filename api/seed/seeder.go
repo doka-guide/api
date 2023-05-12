@@ -17,6 +17,11 @@ func Load(db *gorm.DB) {
 			Email:    os.Getenv("USER_MAIL"),
 			Password: os.Getenv("USER_PASS"),
 		},
+		{
+			Nickname: os.Getenv("ADMIN_NAME"),
+			Email:    os.Getenv("ADMIN_MAIL"),
+			Password: os.Getenv("ADMIN_PASS"),
+		},
 	}
 
 	// Создание записей по умолчанию в режиме отладки
