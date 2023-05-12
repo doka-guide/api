@@ -57,7 +57,7 @@ func (server *Server) CreateProfileLink(w http.ResponseWriter, r *http.Request) 
 
 // OptionsProfileLinks – Для предварительной загрузки (prefetch)
 func (server *Server) OptionsProfileLinks(w http.ResponseWriter, r *http.Request) {
-	responses.JSON(w, http.StatusOK, []byte("Request with options has been processed"))
+	responses.JSON(w, http.StatusOK, []byte("Запрос OPTIONS обработан"))
 }
 
 // GetProfileLinks – Вывод всех ссылок

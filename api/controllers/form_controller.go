@@ -67,7 +67,7 @@ func (server *Server) CreateForm(w http.ResponseWriter, r *http.Request) {
 
 // OptionsForms – Для предварительной загрузки (prefetch)
 func (server *Server) OptionsForms(w http.ResponseWriter, r *http.Request) {
-	responses.JSON(w, http.StatusOK, []byte("Request with options has been processed"))
+	responses.JSON(w, http.StatusOK, []byte("Запрос OPTIONS обработан"))
 }
 
 // GetForms – Вывод всех форм

@@ -48,7 +48,7 @@ func (server *Server) CreateSubscriptionReport(w http.ResponseWriter, r *http.Re
 
 // OptionsSubscriptionReports – Для предварительной загрузки (prefetch)
 func (server *Server) OptionsSubscriptionReports(w http.ResponseWriter, r *http.Request) {
-	responses.JSON(w, http.StatusOK, []byte("Request with options has been processed"))
+	responses.JSON(w, http.StatusOK, []byte("Запрос OPTIONS обработан"))
 }
 
 // GetSubscriptionReports – Вывод всех отчёта о загрузке ссылок

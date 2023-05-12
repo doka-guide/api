@@ -107,7 +107,7 @@ func (server *Server) CreateSubscription(w http.ResponseWriter, r *http.Request)
 
 // OptionsSubscriptions – Для предварительной загрузки (prefetch)
 func (server *Server) OptionsSubscriptions(w http.ResponseWriter, r *http.Request) {
-	responses.JSON(w, http.StatusOK, []byte("Request with options has been processed"))
+	responses.JSON(w, http.StatusOK, []byte("Запрос OPTIONS обработан"))
 }
 
 // GetSubscriptions – Вывод всех форм

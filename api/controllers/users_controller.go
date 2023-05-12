@@ -49,7 +49,7 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 // OptionsUsers – Используется для подготовки соединения
 func (server *Server) OptionsUsers(w http.ResponseWriter, r *http.Request) {
-	responses.JSON(w, http.StatusOK, []byte("Request with options has been processed"))
+	responses.JSON(w, http.StatusOK, []byte("Запрос OPTIONS обработан"))
 }
 
 // GetUsers - all users
