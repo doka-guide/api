@@ -4,7 +4,6 @@ package controllers
 import "github.com/doka-guide/api/api/middlewares"
 
 func (server *Server) initializeRoutes() {
-
 	// Точки входа для сущности Home
 	server.Router.HandleFunc("/", middlewares.SetMiddlewareJSON(server.OptionsHome)).Methods("OPTIONS")
 	server.Router.HandleFunc("/", middlewares.SetMiddlewareJSON(server.Home)).Methods("GET")

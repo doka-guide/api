@@ -102,7 +102,6 @@ func (u *User) Validate(action string) error {
 
 // SaveUser - Сохранение информации о пользователе
 func (u *User) SaveUser(db *gorm.DB) (*User, error) {
-
 	var err = db.Debug().Create(&u).Error
 	if err != nil {
 		return &User{}, err
@@ -135,7 +134,6 @@ func (u *User) FindUserByID(db *gorm.DB, uid uint64) (*User, error) {
 
 // UpdateAUser - Обновление информации о пользователе
 func (u *User) UpdateAUser(db *gorm.DB, uid uint64) (*User, error) {
-
 	// Хеширование пароля
 	err := u.BeforeSave()
 	if err != nil {
@@ -162,7 +160,6 @@ func (u *User) UpdateAUser(db *gorm.DB, uid uint64) (*User, error) {
 
 // DeleteAUser - Удаление пользователя
 func (u *User) DeleteAUser(db *gorm.DB, uid uint64) (int64, error) {
-
 	db = db.Debug().Model(&User{}).Where("id = ?", uid).Take(&User{}).Delete(&User{})
 
 	if db.Error != nil {

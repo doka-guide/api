@@ -15,7 +15,6 @@ import (
 var server = controllers.Server{}
 
 func Run() {
-
 	var err = godotenv.Load()
 	if err != nil {
 		log.Fatalf("Не могу получить доступ к файлу '.env': %v", err)

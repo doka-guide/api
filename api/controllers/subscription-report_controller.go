@@ -18,7 +18,6 @@ import (
 
 // CreateSubscriptionReport – Создание отчёта о загрузке ссылки
 func (server *Server) CreateSubscriptionReport(w http.ResponseWriter, r *http.Request) {
-
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -71,7 +70,6 @@ func (server *Server) GetSubscriptionReports(w http.ResponseWriter, r *http.Requ
 
 // GetSubscriptionReport – Вывод отчёта о загрузке ссылки по Hash
 func (server *Server) GetSubscriptionReport(w http.ResponseWriter, r *http.Request) {
-
 	_, err := auth.ExtractTokenID(r)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
@@ -92,7 +90,6 @@ func (server *Server) GetSubscriptionReport(w http.ResponseWriter, r *http.Reque
 
 // DeleteSubscriptionReport – Удаляет данные о отчёта о загрузке ссылке из базы данных
 func (server *Server) DeleteSubscriptionReport(w http.ResponseWriter, r *http.Request) {
-
 	vars := mux.Vars(r)
 
 	// Валидация подписки

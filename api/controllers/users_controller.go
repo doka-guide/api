@@ -18,7 +18,6 @@ import (
 
 // CreateUser - Создание пользователя
 func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
-
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -55,7 +54,6 @@ func (server *Server) OptionsUsers(w http.ResponseWriter, r *http.Request) {
 
 // GetUsers - all users
 func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
-
 	_, err := auth.ExtractTokenID(r)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
@@ -74,7 +72,6 @@ func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 
 // GetUser - Получение информации о пользователе
 func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
-
 	_, err := auth.ExtractTokenID(r)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
@@ -98,7 +95,6 @@ func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 
 // UpdateUser - Обновление информации о пользователе
 func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
-
 	vars := mux.Vars(r)
 	uid, err := strconv.ParseUint(vars["id"], 10, 32)
 	if err != nil {
@@ -142,9 +138,7 @@ func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 // DeleteUser - Удаление пользователя
 func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request) {
-
 	vars := mux.Vars(r)
-
 	user := models.User{}
 
 	uid, err := strconv.ParseUint(vars["id"], 10, 32)

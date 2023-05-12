@@ -21,7 +21,6 @@ import (
 
 // CreateSubscription – Создание записи о новой отправленной подписке
 func (server *Server) CreateSubscription(w http.ResponseWriter, r *http.Request) {
-
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -130,7 +129,6 @@ func (server *Server) GetSubscriptions(w http.ResponseWriter, r *http.Request) {
 
 // GetSubscription – Вывод подписки по ID
 func (server *Server) GetSubscription(w http.ResponseWriter, r *http.Request) {
-
 	_, err := auth.ExtractTokenID(r)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
@@ -155,7 +153,6 @@ func (server *Server) GetSubscription(w http.ResponseWriter, r *http.Request) {
 
 // UpdateSubscription – Обновление информации в подписке
 func (server *Server) UpdateSubscription(w http.ResponseWriter, r *http.Request) {
-
 	vars := mux.Vars(r)
 
 	// Check if the form id is valid
@@ -226,7 +223,6 @@ func (server *Server) UpdateSubscription(w http.ResponseWriter, r *http.Request)
 
 // DeleteSubscription – Удаляет данные подписки из базы данных
 func (server *Server) DeleteSubscription(w http.ResponseWriter, r *http.Request) {
-
 	vars := mux.Vars(r)
 
 	// Валидация подписки

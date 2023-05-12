@@ -18,7 +18,6 @@ import (
 
 // UploadFile – Загрузка файла из формы
 func (server *Server) UploadFile(w http.ResponseWriter, r *http.Request) {
-
 	err := godotenv.Load()
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)

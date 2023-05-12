@@ -49,9 +49,7 @@ func (server *Server) Login(w http.ResponseWriter, r *http.Request) {
 
 // SignIn - Обработка учётных данных пользователя
 func (server *Server) SignIn(email, password string) (string, error) {
-
 	var err error
-
 	user := models.User{}
 
 	err = server.DB.Debug().Model(models.User{}).Where("email = ?", email).Take(&user).Error

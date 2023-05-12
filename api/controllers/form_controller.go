@@ -18,7 +18,6 @@ import (
 
 // CreateForm – Создание записи о новой отправленной форме
 func (server *Server) CreateForm(w http.ResponseWriter, r *http.Request) {
-
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -90,7 +89,6 @@ func (server *Server) GetForms(w http.ResponseWriter, r *http.Request) {
 
 // GetForm – Вывод формы по ID
 func (server *Server) GetForm(w http.ResponseWriter, r *http.Request) {
-
 	_, err := auth.ExtractTokenID(r)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
@@ -115,7 +113,6 @@ func (server *Server) GetForm(w http.ResponseWriter, r *http.Request) {
 
 // UpdateForm – Обновление информации в форме
 func (server *Server) UpdateForm(w http.ResponseWriter, r *http.Request) {
-
 	vars := mux.Vars(r)
 
 	// Check if the form id is valid
@@ -186,7 +183,6 @@ func (server *Server) UpdateForm(w http.ResponseWriter, r *http.Request) {
 
 // DeleteForm – Удаляет данные формы из базы данных
 func (server *Server) DeleteForm(w http.ResponseWriter, r *http.Request) {
-
 	vars := mux.Vars(r)
 
 	// Валидация формы

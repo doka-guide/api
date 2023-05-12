@@ -18,7 +18,6 @@ import (
 
 // CreateProfileLink – Создание ссылки
 func (server *Server) CreateProfileLink(w http.ResponseWriter, r *http.Request) {
-
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -80,7 +79,6 @@ func (server *Server) GetProfileLinks(w http.ResponseWriter, r *http.Request) {
 
 // GetProfileLink – Вывод ссылки по Hash
 func (server *Server) GetProfileLink(w http.ResponseWriter, r *http.Request) {
-
 	_, err := auth.ExtractTokenID(r)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
@@ -101,7 +99,6 @@ func (server *Server) GetProfileLink(w http.ResponseWriter, r *http.Request) {
 
 // DeleteProfileLink – Удаляет данные о ссылке из базы данных
 func (server *Server) DeleteProfileLink(w http.ResponseWriter, r *http.Request) {
-
 	vars := mux.Vars(r)
 
 	// Валидация подписки
