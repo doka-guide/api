@@ -36,7 +36,9 @@ func (server *Server) CreateProfileLink(w http.ResponseWriter, r *http.Request) 
 	}
 
 	// Проверка авторизации
-	GetUserIDByToken(w, r)
+	if GetUserIDByToken(w, r) == 0 {
+		return
+	}
 
 	linkCreated, err := link.SaveProfileLink(server.DB)
 	if err != nil {
@@ -56,7 +58,9 @@ func (server *Server) OptionsProfileLinks(w http.ResponseWriter, r *http.Request
 
 // GetProfileLinks – Вывод всех ссылок
 func (server *Server) GetProfileLinks(w http.ResponseWriter, r *http.Request) {
-	GetUserIDByToken(w, r)
+	if GetUserIDByToken(w, r) == 0 {
+		return
+	}
 
 	link := models.ProfileLink{}
 	links, err := link.FindAllProfileLinks(server.DB)
@@ -69,7 +73,9 @@ func (server *Server) GetProfileLinks(w http.ResponseWriter, r *http.Request) {
 
 // GetProfileLink – Вывод ссылки по Hash
 func (server *Server) GetProfileLink(w http.ResponseWriter, r *http.Request) {
-	GetUserIDByToken(w, r)
+	if GetUserIDByToken(w, r) == 0 {
+		return
+	}
 
 	vars := mux.Vars(r)
 	hash := vars["id"]
@@ -96,6 +102,9 @@ func (server *Server) DeleteProfileLink(w http.ResponseWriter, r *http.Request) 
 
 	// Проверка авторизации
 	uid := GetUserIDByToken(w, r)
+	if uid == 0 {
+		return
+	}
 
 	// Проверка наличия подписки
 	link := models.ProfileLink{}

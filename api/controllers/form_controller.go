@@ -36,7 +36,9 @@ func (server *Server) CreateForm(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Проверка авторизации
-	GetUserIDByToken(w, r)
+	if GetUserIDByToken(w, r) == 0 {
+		return
+	}
 
 	formCreated, err := form.SaveForm(server.DB)
 	if err != nil {
@@ -66,7 +68,9 @@ func (server *Server) OptionsForms(w http.ResponseWriter, r *http.Request) {
 
 // GetForms – Вывод всех форм
 func (server *Server) GetForms(w http.ResponseWriter, r *http.Request) {
-	GetUserIDByToken(w, r)
+	if GetUserIDByToken(w, r) == 0 {
+		return
+	}
 
 	form := models.Form{}
 	forms, err := form.FindAllForms(server.DB)
@@ -79,7 +83,9 @@ func (server *Server) GetForms(w http.ResponseWriter, r *http.Request) {
 
 // GetForm – Вывод формы по ID
 func (server *Server) GetForm(w http.ResponseWriter, r *http.Request) {
-	GetUserIDByToken(w, r)
+	if GetUserIDByToken(w, r) == 0 {
+		return
+	}
 
 	vars := mux.Vars(r)
 	pid, err := strconv.ParseUint(vars["id"], 10, 64)
@@ -109,6 +115,9 @@ func (server *Server) UpdateForm(w http.ResponseWriter, r *http.Request) {
 	}
 
 	uid := GetUserIDByToken(w, r)
+	if uid == 0 {
+		return
+	}
 
 	// Проверка существования формы
 	form := models.Form{}
@@ -175,6 +184,9 @@ func (server *Server) DeleteForm(w http.ResponseWriter, r *http.Request) {
 
 	// Проверка авторизации
 	uid := GetUserIDByToken(w, r)
+	if uid == 0 {
+		return
+	}
 
 	// Проверка наличия формы
 	form := models.Form{}
@@ -200,7 +212,9 @@ func (server *Server) DeleteForm(w http.ResponseWriter, r *http.Request) {
 
 // GetFeedbackForms – Вывод информации о заполненных формах обратной связи за период
 func (server *Server) GetFeedbackForms(w http.ResponseWriter, r *http.Request) {
-	GetUserIDByToken(w, r)
+	if GetUserIDByToken(w, r) == 0 {
+		return
+	}
 
 	vars := mux.Vars(r)
 	start := vars["start"]
@@ -213,7 +227,9 @@ func (server *Server) GetFeedbackForms(w http.ResponseWriter, r *http.Request) {
 
 // GetQuestionForms – Вывод информации о заполненных формах обратной связи за период
 func (server *Server) GetQuestionForms(w http.ResponseWriter, r *http.Request) {
-	GetUserIDByToken(w, r)
+	if GetUserIDByToken(w, r) == 0 {
+		return
+	}
 
 	vars := mux.Vars(r)
 	start := vars["start"]

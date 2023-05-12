@@ -40,6 +40,9 @@ func (server *Server) CreateSubscription(w http.ResponseWriter, r *http.Request)
 
 	// Проверка авторизации
 	uid := GetUserIDByToken(w, r)
+	if uid == 0 {
+		return
+	}
 
 	if uid != subForm.AuthorID {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
@@ -110,7 +113,9 @@ func (server *Server) OptionsSubscriptions(w http.ResponseWriter, r *http.Reques
 
 // GetSubscriptions – Вывод всех форм
 func (server *Server) GetSubscriptions(w http.ResponseWriter, r *http.Request) {
-	GetUserIDByToken(w, r)
+	if GetUserIDByToken(w, r) == 0 {
+		return
+	}
 
 	form := models.Subscription{}
 	forms, err := form.FindAllSubscriptions(server.DB)
@@ -123,7 +128,9 @@ func (server *Server) GetSubscriptions(w http.ResponseWriter, r *http.Request) {
 
 // GetSubscription – Вывод подписки по ID
 func (server *Server) GetSubscription(w http.ResponseWriter, r *http.Request) {
-	GetUserIDByToken(w, r)
+	if GetUserIDByToken(w, r) == 0 {
+		return
+	}
 
 	vars := mux.Vars(r)
 	pid, err := strconv.ParseUint(vars["id"], 10, 64)
@@ -154,6 +161,9 @@ func (server *Server) UpdateSubscription(w http.ResponseWriter, r *http.Request)
 
 	// Проверка авторизации
 	uid := GetUserIDByToken(w, r)
+	if uid == 0 {
+		return
+	}
 
 	// Проверка существования подписки
 	form := models.Subscription{}
@@ -220,6 +230,9 @@ func (server *Server) DeleteSubscription(w http.ResponseWriter, r *http.Request)
 
 	// Проверка авторизации
 	uid := GetUserIDByToken(w, r)
+	if uid == 0 {
+		return
+	}
 
 	// Проверка наличия подписки
 	form := models.Subscription{}
@@ -245,7 +258,9 @@ func (server *Server) DeleteSubscription(w http.ResponseWriter, r *http.Request)
 
 // GetSubscriptionFormsWithHash – Вывод адресов электронной почты и настроек с указанием хэша
 func (server *Server) GetSubscriptionFormsWithHash(w http.ResponseWriter, r *http.Request) {
-	GetUserIDByToken(w, r)
+	if GetUserIDByToken(w, r) == 0 {
+		return
+	}
 
 	vars := mux.Vars(r)
 	start := vars["start"]

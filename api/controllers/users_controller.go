@@ -53,7 +53,9 @@ func (server *Server) OptionsUsers(w http.ResponseWriter, r *http.Request) {
 
 // GetUsers - all users
 func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
-	GetUserIDByToken(w, r)
+	if GetUserIDByToken(w, r) == 0 {
+		return
+	}
 
 	user := models.User{}
 
@@ -67,7 +69,9 @@ func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 
 // GetUser - Получение информации о пользователе
 func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
-	GetUserIDByToken(w, r)
+	if GetUserIDByToken(w, r) == 0 {
+		return
+	}
 
 	vars := mux.Vars(r)
 	uid, err := strconv.ParseUint(vars["id"], 10, 64)
