@@ -50,21 +50,35 @@ func Load(db *gorm.DB) {
 
 	// Права на запросы для групп пользователей
 	var permissions = []models.Permission{
-		{
-			Name: os.Getenv("PERMISSION_NAME_OPTIONS"),
-		},
-		{
-			Name: os.Getenv("PERMISSION_NAME_GET"),
-		},
-		{
-			Name: os.Getenv("PERMISSION_NAME_POST"),
-		},
-		{
-			Name: os.Getenv("PERMISSION_NAME_PUT"),
-		},
-		{
-			Name: os.Getenv("PERMISSION_NAME_DELETE"),
-		},
+		{Name: os.Getenv("PERMISSION_REQUEST_OPTIONS") + os.Getenv("PERMISSION_ENTITY_USER")},
+		{Name: os.Getenv("PERMISSION_REQUEST_GET") + os.Getenv("PERMISSION_ENTITY_USER")},
+		{Name: os.Getenv("PERMISSION_REQUEST_POST") + os.Getenv("PERMISSION_ENTITY_USER")},
+		{Name: os.Getenv("PERMISSION_REQUEST_PUT") + os.Getenv("PERMISSION_ENTITY_USER")},
+		{Name: os.Getenv("PERMISSION_REQUEST_DELETE") + os.Getenv("PERMISSION_ENTITY_USER")},
+
+		{Name: os.Getenv("PERMISSION_REQUEST_OPTIONS") + os.Getenv("PERMISSION_ENTITY_FORM")},
+		{Name: os.Getenv("PERMISSION_REQUEST_GET") + os.Getenv("PERMISSION_ENTITY_FORM")},
+		{Name: os.Getenv("PERMISSION_REQUEST_POST") + os.Getenv("PERMISSION_ENTITY_FORM")},
+		{Name: os.Getenv("PERMISSION_REQUEST_PUT") + os.Getenv("PERMISSION_ENTITY_FORM")},
+		{Name: os.Getenv("PERMISSION_REQUEST_DELETE") + os.Getenv("PERMISSION_ENTITY_FORM")},
+
+		{Name: os.Getenv("PERMISSION_REQUEST_OPTIONS") + os.Getenv("PERMISSION_ENTITY_PROFILE_LINK")},
+		{Name: os.Getenv("PERMISSION_REQUEST_GET") + os.Getenv("PERMISSION_ENTITY_PROFILE_LINK")},
+		{Name: os.Getenv("PERMISSION_REQUEST_POST") + os.Getenv("PERMISSION_ENTITY_PROFILE_LINK")},
+		{Name: os.Getenv("PERMISSION_REQUEST_PUT") + os.Getenv("PERMISSION_ENTITY_PROFILE_LINK")},
+		{Name: os.Getenv("PERMISSION_REQUEST_DELETE") + os.Getenv("PERMISSION_ENTITY_PROFILE_LINK")},
+
+		{Name: os.Getenv("PERMISSION_REQUEST_OPTIONS") + os.Getenv("PERMISSION_ENTITY_SUBSCRIPTION")},
+		{Name: os.Getenv("PERMISSION_REQUEST_GET") + os.Getenv("PERMISSION_ENTITY_SUBSCRIPTION")},
+		{Name: os.Getenv("PERMISSION_REQUEST_POST") + os.Getenv("PERMISSION_ENTITY_SUBSCRIPTION")},
+		{Name: os.Getenv("PERMISSION_REQUEST_PUT") + os.Getenv("PERMISSION_ENTITY_SUBSCRIPTION")},
+		{Name: os.Getenv("PERMISSION_REQUEST_DELETE") + os.Getenv("PERMISSION_ENTITY_SUBSCRIPTION")},
+
+		{Name: os.Getenv("PERMISSION_REQUEST_OPTIONS") + os.Getenv("PERMISSION_ENTITY_SUBSCRIPTION_REPORT")},
+		{Name: os.Getenv("PERMISSION_REQUEST_GET") + os.Getenv("PERMISSION_ENTITY_SUBSCRIPTION_REPORT")},
+		{Name: os.Getenv("PERMISSION_REQUEST_POST") + os.Getenv("PERMISSION_ENTITY_SUBSCRIPTION_REPORT")},
+		{Name: os.Getenv("PERMISSION_REQUEST_PUT") + os.Getenv("PERMISSION_ENTITY_SUBSCRIPTION_REPORT")},
+		{Name: os.Getenv("PERMISSION_REQUEST_DELETE") + os.Getenv("PERMISSION_ENTITY_SUBSCRIPTION_REPORT")},
 	}
 
 	var groupPermissions = []models.GroupPermission{
@@ -147,11 +161,11 @@ func Load(db *gorm.DB) {
 		}
 		err = db.Debug().Model(&models.SubscriptionReport{}).AddForeignKey("profile_id", "subscriptions(id)", "cascade", "cascade").Error
 		if err != nil {
-			log.Fatalf("Установка внешнего ключа завершилась неудачей (subscriptionreport -> users): %v", err)
+			log.Fatalf("Установка внешнего ключа завершилась неудачей (subscription report -> users): %v", err)
 		}
 		err = db.Debug().Model(&models.SubscriptionReport{}).AddForeignKey("profile_id", "subscriptions(id)", "cascade", "cascade").Error
 		if err != nil {
-			log.Fatalf("Установка внешнего ключа завершилась неудачей (subscriptionreport -> subscriptions): %v", err)
+			log.Fatalf("Установка внешнего ключа завершилась неудачей (subscription report -> subscriptions): %v", err)
 		}
 
 		// Запись записей по умолчанию
