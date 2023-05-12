@@ -73,9 +73,9 @@ func (p *GroupPermission) FindAllGroupPermission(db *gorm.DB) (*[]GroupPermissio
 }
 
 // FindGroupPermissionByID - Вывод данных пары группа-разрешение с ID
-func (p *GroupPermission) FindGroupPermissionByID(db *gorm.DB, hash string) (*GroupPermission, error) {
+func (p *GroupPermission) FindGroupPermissionByID(db *gorm.DB, id string) (*GroupPermission, error) {
 	var err error
-	err = db.Debug().Model(&GroupPermission{}).Where("id = ?", hash).Take(&p).Error
+	err = db.Debug().Model(&GroupPermission{}).Where("id = ?", id).Take(&p).Error
 	if err != nil {
 		return &GroupPermission{}, err
 	}
