@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/doka-guide/api/api/auth"
 	"github.com/doka-guide/api/api/models"
 	"github.com/doka-guide/api/api/responses"
 	"github.com/doka-guide/api/api/utils/formaterror"
@@ -57,11 +56,7 @@ func (server *Server) OptionsProfileLinks(w http.ResponseWriter, r *http.Request
 
 // GetProfileLinks – Вывод всех ссылок
 func (server *Server) GetProfileLinks(w http.ResponseWriter, r *http.Request) {
-	_, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
+	GetUserIDByToken(w, r)
 
 	link := models.ProfileLink{}
 	links, err := link.FindAllProfileLinks(server.DB)
@@ -74,11 +69,7 @@ func (server *Server) GetProfileLinks(w http.ResponseWriter, r *http.Request) {
 
 // GetProfileLink – Вывод ссылки по Hash
 func (server *Server) GetProfileLink(w http.ResponseWriter, r *http.Request) {
-	_, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
+	GetUserIDByToken(w, r)
 
 	vars := mux.Vars(r)
 	hash := vars["id"]

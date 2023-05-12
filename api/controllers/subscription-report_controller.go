@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/doka-guide/api/api/auth"
 	"github.com/doka-guide/api/api/models"
 	"github.com/doka-guide/api/api/responses"
 	"github.com/doka-guide/api/api/utils/formaterror"
@@ -53,11 +52,7 @@ func (server *Server) OptionsSubscriptionReports(w http.ResponseWriter, r *http.
 
 // GetSubscriptionReports – Вывод всех отчёта о загрузке ссылок
 func (server *Server) GetSubscriptionReports(w http.ResponseWriter, r *http.Request) {
-	_, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
+	GetUserIDByToken(w, r)
 
 	report := models.SubscriptionReport{}
 	reports, err := report.FindAllSubscriptionReports(server.DB)
@@ -70,11 +65,7 @@ func (server *Server) GetSubscriptionReports(w http.ResponseWriter, r *http.Requ
 
 // GetSubscriptionReport – Вывод отчёта о загрузке ссылки по Hash
 func (server *Server) GetSubscriptionReport(w http.ResponseWriter, r *http.Request) {
-	_, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
+	GetUserIDByToken(w, r)
 
 	vars := mux.Vars(r)
 	path := vars["id"]

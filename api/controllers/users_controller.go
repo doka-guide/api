@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/doka-guide/api/api/auth"
 	"github.com/doka-guide/api/api/models"
 	"github.com/doka-guide/api/api/responses"
 	"github.com/doka-guide/api/api/utils/formaterror"
@@ -54,11 +53,7 @@ func (server *Server) OptionsUsers(w http.ResponseWriter, r *http.Request) {
 
 // GetUsers - all users
 func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
-	_, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
+	GetUserIDByToken(w, r)
 
 	user := models.User{}
 
@@ -72,11 +67,7 @@ func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 
 // GetUser - Получение информации о пользователе
 func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
-	_, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
+	GetUserIDByToken(w, r)
 
 	vars := mux.Vars(r)
 	uid, err := strconv.ParseUint(vars["id"], 10, 64)
@@ -112,15 +103,13 @@ func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	tokenID, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
+
+	tokenID := GetUserIDByToken(w, r)
 	if tokenID != uid {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
 		return
 	}
+
 	user.Prepare()
 	err = user.Validate("update")
 	if err != nil {
@@ -146,11 +135,13 @@ func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
-	tokenID, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+
+	tokenID := GetUserIDByToken(w, r)
+	if tokenID != uid {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
 		return
 	}
+
 	if tokenID != 0 && tokenID != uid {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
 		return

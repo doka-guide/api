@@ -11,7 +11,6 @@ import (
 	"regexp"
 	"strconv"
 
-	"github.com/doka-guide/api/api/auth"
 	"github.com/doka-guide/api/api/models"
 	"github.com/doka-guide/api/api/responses"
 	"github.com/doka-guide/api/api/utils/formaterror"
@@ -111,11 +110,7 @@ func (server *Server) OptionsSubscriptions(w http.ResponseWriter, r *http.Reques
 
 // GetSubscriptions – Вывод всех форм
 func (server *Server) GetSubscriptions(w http.ResponseWriter, r *http.Request) {
-	_, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
+	GetUserIDByToken(w, r)
 
 	form := models.Subscription{}
 	forms, err := form.FindAllSubscriptions(server.DB)
@@ -128,11 +123,7 @@ func (server *Server) GetSubscriptions(w http.ResponseWriter, r *http.Request) {
 
 // GetSubscription – Вывод подписки по ID
 func (server *Server) GetSubscription(w http.ResponseWriter, r *http.Request) {
-	_, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
+	GetUserIDByToken(w, r)
 
 	vars := mux.Vars(r)
 	pid, err := strconv.ParseUint(vars["id"], 10, 64)
@@ -254,11 +245,7 @@ func (server *Server) DeleteSubscription(w http.ResponseWriter, r *http.Request)
 
 // GetSubscriptionFormsWithHash – Вывод адресов электронной почты и настроек с указанием хэша
 func (server *Server) GetSubscriptionFormsWithHash(w http.ResponseWriter, r *http.Request) {
-	_, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
+	GetUserIDByToken(w, r)
 
 	vars := mux.Vars(r)
 	start := vars["start"]

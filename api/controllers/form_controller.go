@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/doka-guide/api/api/auth"
 	"github.com/doka-guide/api/api/models"
 	"github.com/doka-guide/api/api/responses"
 	"github.com/doka-guide/api/api/utils/formaterror"
@@ -67,11 +66,7 @@ func (server *Server) OptionsForms(w http.ResponseWriter, r *http.Request) {
 
 // GetForms – Вывод всех форм
 func (server *Server) GetForms(w http.ResponseWriter, r *http.Request) {
-	_, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
+	GetUserIDByToken(w, r)
 
 	form := models.Form{}
 	forms, err := form.FindAllForms(server.DB)
@@ -84,11 +79,7 @@ func (server *Server) GetForms(w http.ResponseWriter, r *http.Request) {
 
 // GetForm – Вывод формы по ID
 func (server *Server) GetForm(w http.ResponseWriter, r *http.Request) {
-	_, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
+	GetUserIDByToken(w, r)
 
 	vars := mux.Vars(r)
 	pid, err := strconv.ParseUint(vars["id"], 10, 64)
@@ -209,11 +200,7 @@ func (server *Server) DeleteForm(w http.ResponseWriter, r *http.Request) {
 
 // GetFeedbackForms – Вывод информации о заполненных формах обратной связи за период
 func (server *Server) GetFeedbackForms(w http.ResponseWriter, r *http.Request) {
-	_, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
+	GetUserIDByToken(w, r)
 
 	vars := mux.Vars(r)
 	start := vars["start"]
@@ -226,11 +213,7 @@ func (server *Server) GetFeedbackForms(w http.ResponseWriter, r *http.Request) {
 
 // GetQuestionForms – Вывод информации о заполненных формах обратной связи за период
 func (server *Server) GetQuestionForms(w http.ResponseWriter, r *http.Request) {
-	_, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
+	GetUserIDByToken(w, r)
 
 	vars := mux.Vars(r)
 	start := vars["start"]
