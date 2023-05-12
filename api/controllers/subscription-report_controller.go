@@ -100,7 +100,7 @@ func (server *Server) DeleteSubscriptionReport(w http.ResponseWriter, r *http.Re
 	}
 
 	// Проверка авторизации
-	uid := GetUserIdByToken(w, r)
+	uid := GetUserIDByToken(w, r)
 
 	// Проверка наличия подписки
 	report := models.SubscriptionReport{}

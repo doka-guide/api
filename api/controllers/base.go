@@ -18,7 +18,8 @@ import (
 	"github.com/doka-guide/api/api/responses"
 )
 
-func GetUserIdByToken(w http.ResponseWriter, r *http.Request) uint64 {
+// GetUserIDByToken — проверка авторизации пользователей
+func GetUserIDByToken(w http.ResponseWriter, r *http.Request) uint64 {
 	uid, err := auth.ExtractTokenID(r)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
@@ -27,13 +28,13 @@ func GetUserIdByToken(w http.ResponseWriter, r *http.Request) uint64 {
 	return uid
 }
 
-// Объект Сервер
+// Server — Объект Сервер
 type Server struct {
 	DB     *gorm.DB
 	Router *mux.Router
 }
 
-// Инициализация сервера
+// Initialize — Инициализация сервера
 func (server *Server) Initialize(Dbdriver, DBUser, DBPassword, DBPort, DBHost, DBName string) {
 	var err error
 	if Dbdriver == "postgres" {
@@ -53,7 +54,7 @@ func (server *Server) Initialize(Dbdriver, DBUser, DBPassword, DBPort, DBHost, D
 	server.initializeRoutes()
 }
 
-// Запуск сервера
+// Run — Запуск сервера
 func (server *Server) Run(addr string) {
 	fmt.Println("Запустился на хосте", addr)
 	log.Fatal(http.ListenAndServe(addr, server.Router))

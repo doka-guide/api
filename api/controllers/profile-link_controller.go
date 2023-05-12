@@ -37,7 +37,7 @@ func (server *Server) CreateProfileLink(w http.ResponseWriter, r *http.Request) 
 	}
 
 	// Проверка авторизации
-	GetUserIdByToken(w, r)
+	GetUserIDByToken(w, r)
 
 	linkCreated, err := link.SaveProfileLink(server.DB)
 	if err != nil {
@@ -104,7 +104,7 @@ func (server *Server) DeleteProfileLink(w http.ResponseWriter, r *http.Request) 
 	}
 
 	// Проверка авторизации
-	uid := GetUserIdByToken(w, r)
+	uid := GetUserIDByToken(w, r)
 
 	// Проверка наличия подписки
 	link := models.ProfileLink{}

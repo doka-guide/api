@@ -40,7 +40,7 @@ func (server *Server) CreateSubscription(w http.ResponseWriter, r *http.Request)
 	}
 
 	// Проверка авторизации
-	uid := GetUserIdByToken(w, r)
+	uid := GetUserIDByToken(w, r)
 
 	if uid != subForm.AuthorID {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
@@ -162,7 +162,7 @@ func (server *Server) UpdateSubscription(w http.ResponseWriter, r *http.Request)
 	}
 
 	// Проверка авторизации
-	uid := GetUserIdByToken(w, r)
+	uid := GetUserIDByToken(w, r)
 
 	// Проверка существования подписки
 	form := models.Subscription{}
@@ -228,7 +228,7 @@ func (server *Server) DeleteSubscription(w http.ResponseWriter, r *http.Request)
 	}
 
 	// Проверка авторизации
-	uid := GetUserIdByToken(w, r)
+	uid := GetUserIDByToken(w, r)
 
 	// Проверка наличия подписки
 	form := models.Subscription{}

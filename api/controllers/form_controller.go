@@ -37,7 +37,7 @@ func (server *Server) CreateForm(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Проверка авторизации
-	GetUserIdByToken(w, r)
+	GetUserIDByToken(w, r)
 
 	formCreated, err := form.SaveForm(server.DB)
 	if err != nil {
@@ -117,7 +117,7 @@ func (server *Server) UpdateForm(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	uid := GetUserIdByToken(w, r)
+	uid := GetUserIDByToken(w, r)
 
 	// Проверка существования формы
 	form := models.Form{}
@@ -183,7 +183,7 @@ func (server *Server) DeleteForm(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Проверка авторизации
-	uid := GetUserIdByToken(w, r)
+	uid := GetUserIDByToken(w, r)
 
 	// Проверка наличия формы
 	form := models.Form{}
