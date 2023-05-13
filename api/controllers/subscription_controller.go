@@ -22,7 +22,7 @@ import (
 func (server *Server) CreateSubscription(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
 	uid := GetUserIDByToken(w, r)
-	if CheckPermission(uid, "SUBSCRIPTION-POST") {
+	if CheckPermission(server.DB, uid, "SUBSCRIPTION-POST") {
 		return
 	}
 
@@ -114,7 +114,7 @@ func (server *Server) OptionsSubscriptions(w http.ResponseWriter, r *http.Reques
 // GetSubscriptions – Вывод всех форм
 func (server *Server) GetSubscriptions(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
-	if CheckPermission(GetUserIDByToken(w, r), "SUBSCRIPTION-GET") {
+	if CheckPermission(server.DB, GetUserIDByToken(w, r), "SUBSCRIPTION-GET") {
 		return
 	}
 
@@ -130,7 +130,7 @@ func (server *Server) GetSubscriptions(w http.ResponseWriter, r *http.Request) {
 // GetSubscription – Вывод подписки по ID
 func (server *Server) GetSubscription(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
-	if CheckPermission(GetUserIDByToken(w, r), "SUBSCRIPTION-GET") {
+	if CheckPermission(server.DB, GetUserIDByToken(w, r), "SUBSCRIPTION-GET") {
 		return
 	}
 
@@ -154,7 +154,7 @@ func (server *Server) GetSubscription(w http.ResponseWriter, r *http.Request) {
 func (server *Server) UpdateSubscription(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
 	uid := GetUserIDByToken(w, r)
-	if CheckPermission(uid, "SUBSCRIPTION-PUT") {
+	if CheckPermission(server.DB, uid, "SUBSCRIPTION-PUT") {
 		return
 	}
 
@@ -223,7 +223,7 @@ func (server *Server) UpdateSubscription(w http.ResponseWriter, r *http.Request)
 func (server *Server) DeleteSubscription(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
 	uid := GetUserIDByToken(w, r)
-	if CheckPermission(uid, "SUBSCRIPTION-DELETE") {
+	if CheckPermission(server.DB, uid, "SUBSCRIPTION-DELETE") {
 		return
 	}
 
@@ -261,7 +261,7 @@ func (server *Server) DeleteSubscription(w http.ResponseWriter, r *http.Request)
 // GetSubscriptionFormsWithHash – Вывод адресов электронной почты и настроек с указанием хэша
 func (server *Server) GetSubscriptionFormsWithHash(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
-	if CheckPermission(GetUserIDByToken(w, r), "SUBSCRIPTION-GET") {
+	if CheckPermission(server.DB, GetUserIDByToken(w, r), "SUBSCRIPTION-GET") {
 		return
 	}
 

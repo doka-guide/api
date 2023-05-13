@@ -18,7 +18,7 @@ import (
 // CreateForm – Создание записи о новой отправленной форме
 func (server *Server) CreateForm(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
-	if CheckPermission(GetUserIDByToken(w, r), "FORM-POST") {
+	if CheckPermission(server.DB, GetUserIDByToken(w, r), "FORM-POST") {
 		return
 	}
 
@@ -69,7 +69,7 @@ func (server *Server) OptionsForms(w http.ResponseWriter, r *http.Request) {
 // GetForms – Вывод всех форм
 func (server *Server) GetForms(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
-	if CheckPermission(GetUserIDByToken(w, r), "FORM-GET") {
+	if CheckPermission(server.DB, GetUserIDByToken(w, r), "FORM-GET") {
 		return
 	}
 
@@ -85,7 +85,7 @@ func (server *Server) GetForms(w http.ResponseWriter, r *http.Request) {
 // GetForm – Вывод формы по ID
 func (server *Server) GetForm(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
-	if CheckPermission(GetUserIDByToken(w, r), "FORM-GET") {
+	if CheckPermission(server.DB, GetUserIDByToken(w, r), "FORM-GET") {
 		return
 	}
 
@@ -109,7 +109,7 @@ func (server *Server) GetForm(w http.ResponseWriter, r *http.Request) {
 func (server *Server) UpdateForm(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
 	uid := GetUserIDByToken(w, r)
-	if CheckPermission(uid, "FORM-PUT") {
+	if CheckPermission(server.DB, uid, "FORM-PUT") {
 		return
 	}
 
@@ -178,7 +178,7 @@ func (server *Server) UpdateForm(w http.ResponseWriter, r *http.Request) {
 func (server *Server) DeleteForm(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
 	uid := GetUserIDByToken(w, r)
-	if CheckPermission(uid, "FORM-DELETE") {
+	if CheckPermission(server.DB, uid, "FORM-DELETE") {
 		return
 	}
 
@@ -216,7 +216,7 @@ func (server *Server) DeleteForm(w http.ResponseWriter, r *http.Request) {
 // GetFeedbackForms – Вывод информации о заполненных формах обратной связи за период
 func (server *Server) GetFeedbackForms(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
-	if CheckPermission(GetUserIDByToken(w, r), "FORM-GET") {
+	if CheckPermission(server.DB, GetUserIDByToken(w, r), "FORM-GET") {
 		return
 	}
 
@@ -232,7 +232,7 @@ func (server *Server) GetFeedbackForms(w http.ResponseWriter, r *http.Request) {
 // GetQuestionForms – Вывод информации о заполненных формах обратной связи за период
 func (server *Server) GetQuestionForms(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
-	if CheckPermission(GetUserIDByToken(w, r), "FORM-GET") {
+	if CheckPermission(server.DB, GetUserIDByToken(w, r), "FORM-GET") {
 		return
 	}
 
