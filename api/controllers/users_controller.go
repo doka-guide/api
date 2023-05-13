@@ -53,6 +53,7 @@ func (server *Server) OptionsUsers(w http.ResponseWriter, r *http.Request) {
 
 // GetUsers - all users
 func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
+	// Проверка авторизации
 	if CheckPermission(GetUserIDByToken(w, r), "USER-GET") {
 		return
 	}
@@ -69,6 +70,7 @@ func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 
 // GetUser - Получение информации о пользователе
 func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
+	// Проверка авторизации
 	if CheckPermission(GetUserIDByToken(w, r), "USER-GET") {
 		return
 	}
@@ -108,6 +110,7 @@ func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Проверка авторизации
 	tokenID := GetUserIDByToken(w, r)
 	if CheckPermission(tokenID, "USER-PUT") {
 		return
@@ -134,6 +137,12 @@ func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 // DeleteUser - Удаление пользователя
 func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request) {
+	// Проверка авторизации
+	tokenID := GetUserIDByToken(w, r)
+	if CheckPermission(tokenID, "USER-DELETE") {
+		return
+	}
+
 	vars := mux.Vars(r)
 	user := models.User{}
 
@@ -143,10 +152,6 @@ func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tokenID := GetUserIDByToken(w, r)
-	if CheckPermission(tokenID, "USER-DELETE") {
-		return
-	}
 	if tokenID != uid {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
 		return

@@ -52,6 +52,7 @@ func (server *Server) OptionsSubscriptionReports(w http.ResponseWriter, r *http.
 
 // GetSubscriptionReports – Вывод всех отчёта о загрузке ссылок
 func (server *Server) GetSubscriptionReports(w http.ResponseWriter, r *http.Request) {
+	// Проверка авторизации
 	if CheckPermission(GetUserIDByToken(w, r), "SUBSCRIPTION-REPORT-GET") {
 		return
 	}
@@ -67,6 +68,7 @@ func (server *Server) GetSubscriptionReports(w http.ResponseWriter, r *http.Requ
 
 // GetSubscriptionReport – Вывод отчёта о загрузке ссылки по Hash
 func (server *Server) GetSubscriptionReport(w http.ResponseWriter, r *http.Request) {
+	// Проверка авторизации
 	if CheckPermission(GetUserIDByToken(w, r), "SUBSCRIPTION-REPORT-GET") {
 		return
 	}

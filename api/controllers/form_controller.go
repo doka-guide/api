@@ -17,6 +17,11 @@ import (
 
 // CreateForm – Создание записи о новой отправленной форме
 func (server *Server) CreateForm(w http.ResponseWriter, r *http.Request) {
+	// Проверка авторизации
+	if CheckPermission(GetUserIDByToken(w, r), "FORM-POST") {
+		return
+	}
+
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -32,11 +37,6 @@ func (server *Server) CreateForm(w http.ResponseWriter, r *http.Request) {
 	err = form.Validate()
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
-		return
-	}
-
-	// Проверка авторизации
-	if CheckPermission(GetUserIDByToken(w, r), "FORM-POST") {
 		return
 	}
 
@@ -68,6 +68,7 @@ func (server *Server) OptionsForms(w http.ResponseWriter, r *http.Request) {
 
 // GetForms – Вывод всех форм
 func (server *Server) GetForms(w http.ResponseWriter, r *http.Request) {
+	// Проверка авторизации
 	if CheckPermission(GetUserIDByToken(w, r), "FORM-GET") {
 		return
 	}
@@ -83,6 +84,7 @@ func (server *Server) GetForms(w http.ResponseWriter, r *http.Request) {
 
 // GetForm – Вывод формы по ID
 func (server *Server) GetForm(w http.ResponseWriter, r *http.Request) {
+	// Проверка авторизации
 	if CheckPermission(GetUserIDByToken(w, r), "FORM-GET") {
 		return
 	}
@@ -105,17 +107,18 @@ func (server *Server) GetForm(w http.ResponseWriter, r *http.Request) {
 
 // UpdateForm – Обновление информации в форме
 func (server *Server) UpdateForm(w http.ResponseWriter, r *http.Request) {
+	// Проверка авторизации
+	uid := GetUserIDByToken(w, r)
+	if CheckPermission(uid, "FORM-PUT") {
+		return
+	}
+
 	vars := mux.Vars(r)
 
 	// Валидация полей формы
 	pid, err := strconv.ParseUint(vars["id"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
-		return
-	}
-
-	uid := GetUserIDByToken(w, r)
-	if CheckPermission(uid, "FORM-PUT") {
 		return
 	}
 
@@ -173,18 +176,18 @@ func (server *Server) UpdateForm(w http.ResponseWriter, r *http.Request) {
 
 // DeleteForm – Удаляет данные формы из базы данных
 func (server *Server) DeleteForm(w http.ResponseWriter, r *http.Request) {
+	// Проверка авторизации
+	uid := GetUserIDByToken(w, r)
+	if CheckPermission(uid, "FORM-DELETE") {
+		return
+	}
+
 	vars := mux.Vars(r)
 
 	// Валидация формы
 	pid, err := strconv.ParseUint(vars["id"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
-		return
-	}
-
-	// Проверка авторизации
-	uid := GetUserIDByToken(w, r)
-	if CheckPermission(uid, "FORM-DELETE") {
 		return
 	}
 
@@ -212,6 +215,7 @@ func (server *Server) DeleteForm(w http.ResponseWriter, r *http.Request) {
 
 // GetFeedbackForms – Вывод информации о заполненных формах обратной связи за период
 func (server *Server) GetFeedbackForms(w http.ResponseWriter, r *http.Request) {
+	// Проверка авторизации
 	if CheckPermission(GetUserIDByToken(w, r), "FORM-GET") {
 		return
 	}
@@ -227,6 +231,7 @@ func (server *Server) GetFeedbackForms(w http.ResponseWriter, r *http.Request) {
 
 // GetQuestionForms – Вывод информации о заполненных формах обратной связи за период
 func (server *Server) GetQuestionForms(w http.ResponseWriter, r *http.Request) {
+	// Проверка авторизации
 	if CheckPermission(GetUserIDByToken(w, r), "FORM-GET") {
 		return
 	}

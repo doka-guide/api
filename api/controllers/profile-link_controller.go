@@ -17,6 +17,11 @@ import (
 
 // CreateProfileLink – Создание ссылки
 func (server *Server) CreateProfileLink(w http.ResponseWriter, r *http.Request) {
+	// Проверка авторизации
+	if CheckPermission(GetUserIDByToken(w, r), "PROFILE-LINK-POST") {
+		return
+	}
+
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -32,11 +37,6 @@ func (server *Server) CreateProfileLink(w http.ResponseWriter, r *http.Request) 
 	err = link.Validate()
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
-		return
-	}
-
-	// Проверка авторизации
-	if CheckPermission(GetUserIDByToken(w, r), "PROFILE-LINK-POST") {
 		return
 	}
 
@@ -58,6 +58,7 @@ func (server *Server) OptionsProfileLinks(w http.ResponseWriter, r *http.Request
 
 // GetProfileLinks – Вывод всех ссылок
 func (server *Server) GetProfileLinks(w http.ResponseWriter, r *http.Request) {
+	// Проверка авторизации
 	if CheckPermission(GetUserIDByToken(w, r), "PROFILE-LINK-GET") {
 		return
 	}
@@ -73,6 +74,7 @@ func (server *Server) GetProfileLinks(w http.ResponseWriter, r *http.Request) {
 
 // GetProfileLink – Вывод ссылки по Hash
 func (server *Server) GetProfileLink(w http.ResponseWriter, r *http.Request) {
+	// Проверка авторизации
 	if CheckPermission(GetUserIDByToken(w, r), "PROFILE-LINK-GET") {
 		return
 	}
@@ -91,18 +93,18 @@ func (server *Server) GetProfileLink(w http.ResponseWriter, r *http.Request) {
 
 // DeleteProfileLink – Удаляет данные о ссылке из базы данных
 func (server *Server) DeleteProfileLink(w http.ResponseWriter, r *http.Request) {
+	// Проверка авторизации
+	uid := GetUserIDByToken(w, r)
+	if CheckPermission(uid, "PROFILE-LINK-DELETE") {
+		return
+	}
+
 	vars := mux.Vars(r)
 
 	// Валидация подписки
 	pid, err := strconv.ParseUint(vars["id"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
-		return
-	}
-
-	// Проверка авторизации
-	uid := GetUserIDByToken(w, r)
-	if CheckPermission(uid, "PROFILE-LINK-DELETE") {
 		return
 	}
 
