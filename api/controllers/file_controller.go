@@ -91,5 +91,8 @@ func (server *Server) UploadFile(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
+
+	fmt.Printf("Файл загружен на сервер")
+
 	responses.JSON(w, http.StatusOK, successMessage)
 }

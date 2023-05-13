@@ -22,6 +22,7 @@ import (
 func GetUserIDByToken(w http.ResponseWriter, r *http.Request) uint64 {
 	uid, err := auth.ExtractTokenID(r)
 	if err != nil {
+		fmt.Printf("Ошибка авторизации: Пользователя таким токеном нет в списке")
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return 0
 	}
@@ -32,10 +33,14 @@ func GetUserIDByToken(w http.ResponseWriter, r *http.Request) uint64 {
 // CheckPermission — проверяет, есть ли права на осуществление запроса
 func CheckPermission(db *gorm.DB, id uint64, permName string) bool {
 	if id == 0 {
+		fmt.Printf("Ошибка авторизации: Пользователя с id = %d не имеет права на операцию '%s'", id, permName)
 		return false
 	} else {
 		users := []models.User{}
-		db.Raw("SELECT users.* FROM permissions JOIN group_permissions ON group_permissions.perms_id = permissions.id JOIN grouped_users ON grouped_users.group_id = group_permissions.group_id JOIN users ON users.id = grouped_users.user_id WHERE permissions.name = ? AND users.id = ?", permName, id).Scan(&users)
+		db.Debug().Raw("SELECT users.* FROM permissions JOIN group_permissions ON group_permissions.perms_id = permissions.id JOIN grouped_users ON grouped_users.group_id = group_permissions.group_id JOIN users ON users.id = grouped_users.user_id WHERE permissions.name = ? AND users.id = ?", permName, id).Scan(&users)
+		if len(users) > 0 {
+			fmt.Printf("Пользователь с id = %d имеет права на операцию '%s'", id, permName)
+		}
 		return len(users) > 0
 	}
 }

@@ -133,7 +133,7 @@ type FormsGroupedByDataResult struct {
 // FeedbackFormsGroupedByData - Вывод агрегированных данных по лайкам / замечаниям для материалов
 func (p *Form) FeedbackFormsGroupedByData(db *gorm.DB, start string, end string) *[]FormsGroupedByDataResult {
 	posts := []FormsGroupedByDataResult{}
-	db.Raw("SELECT data, count(data) FROM forms WHERE type = 'feedback' AND created_at >= ? AND created_at <= ? GROUP BY data", start, end).Scan(&posts)
+	db.Debug().Raw("SELECT data, count(data) FROM forms WHERE type = 'feedback' AND created_at >= ? AND created_at <= ? GROUP BY data", start, end).Scan(&posts)
 	return &posts
 }
 
@@ -144,6 +144,6 @@ type QuestionFormsResult struct {
 // QuestionForms - Вывод агрегированных данных по лайкам / замечаниям для материалов
 func (p *Form) QuestionForms(db *gorm.DB, start string, end string) *[]QuestionFormsResult {
 	posts := []QuestionFormsResult{}
-	db.Raw("SELECT data FROM forms WHERE type = 'question' AND created_at >= ? AND created_at <= ?", start, end).Scan(&posts)
+	db.Debug().Raw("SELECT data FROM forms WHERE type = 'question' AND created_at >= ? AND created_at <= ?", start, end).Scan(&posts)
 	return &posts
 }
