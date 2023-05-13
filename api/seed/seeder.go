@@ -84,11 +84,27 @@ func Load(db *gorm.DB) {
 	var groupPermissions = []models.GroupPermission{
 		{
 			GroupID: 1,
-			PermsID: 1,
+			PermsID: 6,
 		},
 		{
 			GroupID: 1,
-			PermsID: 3,
+			PermsID: 8,
+		},
+		{
+			GroupID: 1,
+			PermsID: 16,
+		},
+		{
+			GroupID: 1,
+			PermsID: 17,
+		},
+		{
+			GroupID: 1,
+			PermsID: 18,
+		},
+		{
+			GroupID: 1,
+			PermsID: 19,
 		},
 		{
 			GroupID: 2,
@@ -109,6 +125,86 @@ func Load(db *gorm.DB) {
 		{
 			GroupID: 2,
 			PermsID: 5,
+		},
+		{
+			GroupID: 2,
+			PermsID: 6,
+		},
+		{
+			GroupID: 2,
+			PermsID: 7,
+		},
+		{
+			GroupID: 2,
+			PermsID: 8,
+		},
+		{
+			GroupID: 2,
+			PermsID: 9,
+		},
+		{
+			GroupID: 2,
+			PermsID: 10,
+		},
+		{
+			GroupID: 2,
+			PermsID: 11,
+		},
+		{
+			GroupID: 2,
+			PermsID: 12,
+		},
+		{
+			GroupID: 2,
+			PermsID: 13,
+		},
+		{
+			GroupID: 2,
+			PermsID: 14,
+		},
+		{
+			GroupID: 2,
+			PermsID: 15,
+		},
+		{
+			GroupID: 2,
+			PermsID: 16,
+		},
+		{
+			GroupID: 2,
+			PermsID: 17,
+		},
+		{
+			GroupID: 2,
+			PermsID: 18,
+		},
+		{
+			GroupID: 2,
+			PermsID: 19,
+		},
+		{
+			GroupID: 2,
+			PermsID: 20,
+		},
+		{
+			GroupID: 2,
+			PermsID: 21,
+		},
+		{
+			GroupID: 2,
+			PermsID: 22,
+		},
+		{
+			GroupID: 2,
+			PermsID: 23,
+		},
+		{
+			GroupID: 2,
+			PermsID: 24,
+		},
+		{
+			GroupID: 2,
+			PermsID: 25,
 		},
 	}
 
