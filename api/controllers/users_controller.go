@@ -17,6 +17,11 @@ import (
 
 // CreateUser - Создание пользователя
 func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
+	// Проверка авторизации
+	if CheckPermission(server.DB, GetUserIDByToken(w, r), "USER-POST") {
+		return
+	}
+
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -48,6 +53,11 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 // OptionsUsers – Используется для подготовки соединения
 func (server *Server) OptionsUsers(w http.ResponseWriter, r *http.Request) {
+	// Проверка авторизации
+	if CheckPermission(server.DB, GetUserIDByToken(w, r), "USER-OPTIONS") {
+		return
+	}
+
 	responses.JSON(w, http.StatusOK, []byte("Запрос OPTIONS обработан"))
 }
 

@@ -17,6 +17,11 @@ import (
 
 // CreateSubscriptionReport – Создание отчёта о загрузке ссылки
 func (server *Server) CreateSubscriptionReport(w http.ResponseWriter, r *http.Request) {
+	// Проверка авторизации
+	if CheckPermission(server.DB, GetUserIDByToken(w, r), "SUBSCRIPTION-REPORT-POST") {
+		return
+	}
+
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -87,6 +92,11 @@ func (server *Server) GetSubscriptionReport(w http.ResponseWriter, r *http.Reque
 
 // DeleteSubscriptionReport – Удаляет данные о отчёта о загрузке ссылке из базы данных
 func (server *Server) DeleteSubscriptionReport(w http.ResponseWriter, r *http.Request) {
+	// Проверка авторизации
+	if CheckPermission(server.DB, GetUserIDByToken(w, r), "SUBSCRIPTION-REPORT-DELETE") {
+		return
+	}
+
 	vars := mux.Vars(r)
 
 	// Валидация подписки
