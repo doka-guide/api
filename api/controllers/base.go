@@ -40,7 +40,7 @@ func CheckPermission(db *gorm.DB, id uint64, permName string) bool {
 		if len(users) > 0 {
 			fmt.Printf("Пользователь с id = %d имеет права на операцию '%s'", id, permName)
 		} else {
-			fmt.Printf("Ошибка авторизации: Пользователя с id = %d не имеет права на операцию '%s'", id, permName)
+			fmt.Printf("Ошибка авторизации: Пользователь с id = %d не имеет права на операцию '%s'", id, permName)
 		}
 		return len(users) > 0
 	}
