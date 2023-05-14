@@ -18,7 +18,7 @@ import (
 // CreateSubscriptionReport – Создание отчёта о загрузке ссылки
 func (server *Server) CreateSubscriptionReport(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
-	if CheckPermission(server.DB, GetUserIDByToken(w, r), "SUBSCRIPTION-REPORT-POST") {
+	if !CheckPermission(server.DB, GetUserIDByToken(w, r), "SUBSCRIPTION-REPORT-POST") {
 		return
 	}
 
@@ -58,7 +58,7 @@ func (server *Server) OptionsSubscriptionReports(w http.ResponseWriter, r *http.
 // GetSubscriptionReports – Вывод всех отчёта о загрузке ссылок
 func (server *Server) GetSubscriptionReports(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
-	if CheckPermission(server.DB, GetUserIDByToken(w, r), "SUBSCRIPTION-REPORT-GET") {
+	if !CheckPermission(server.DB, GetUserIDByToken(w, r), "SUBSCRIPTION-REPORT-GET") {
 		return
 	}
 
@@ -74,7 +74,7 @@ func (server *Server) GetSubscriptionReports(w http.ResponseWriter, r *http.Requ
 // GetSubscriptionReport – Вывод отчёта о загрузке ссылки по Hash
 func (server *Server) GetSubscriptionReport(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
-	if CheckPermission(server.DB, GetUserIDByToken(w, r), "SUBSCRIPTION-REPORT-GET") {
+	if !CheckPermission(server.DB, GetUserIDByToken(w, r), "SUBSCRIPTION-REPORT-GET") {
 		return
 	}
 
@@ -93,7 +93,7 @@ func (server *Server) GetSubscriptionReport(w http.ResponseWriter, r *http.Reque
 // DeleteSubscriptionReport – Удаляет данные о отчёта о загрузке ссылке из базы данных
 func (server *Server) DeleteSubscriptionReport(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
-	if CheckPermission(server.DB, GetUserIDByToken(w, r), "SUBSCRIPTION-REPORT-DELETE") {
+	if !CheckPermission(server.DB, GetUserIDByToken(w, r), "SUBSCRIPTION-REPORT-DELETE") {
 		return
 	}
 
@@ -108,7 +108,7 @@ func (server *Server) DeleteSubscriptionReport(w http.ResponseWriter, r *http.Re
 
 	// Проверка авторизации
 	uid := GetUserIDByToken(w, r)
-	if CheckPermission(server.DB, uid, "SUBSCRIPTION-REPORT-DELETE") {
+	if !CheckPermission(server.DB, uid, "SUBSCRIPTION-REPORT-DELETE") {
 		return
 	}
 

@@ -18,7 +18,7 @@ import (
 // CreateUser - Создание пользователя
 func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
-	if CheckPermission(server.DB, GetUserIDByToken(w, r), "USER-POST") {
+	if !CheckPermission(server.DB, GetUserIDByToken(w, r), "USER-POST") {
 		return
 	}
 
@@ -54,7 +54,7 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 // OptionsUsers – Используется для подготовки соединения
 func (server *Server) OptionsUsers(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
-	if CheckPermission(server.DB, GetUserIDByToken(w, r), "USER-OPTIONS") {
+	if !CheckPermission(server.DB, GetUserIDByToken(w, r), "USER-OPTIONS") {
 		return
 	}
 
@@ -64,7 +64,7 @@ func (server *Server) OptionsUsers(w http.ResponseWriter, r *http.Request) {
 // GetUsers - all users
 func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
-	if CheckPermission(server.DB, GetUserIDByToken(w, r), "USER-GET") {
+	if !CheckPermission(server.DB, GetUserIDByToken(w, r), "USER-GET") {
 		return
 	}
 
@@ -81,7 +81,7 @@ func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 // GetUser - Получение информации о пользователе
 func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
-	if CheckPermission(server.DB, GetUserIDByToken(w, r), "USER-GET") {
+	if !CheckPermission(server.DB, GetUserIDByToken(w, r), "USER-GET") {
 		return
 	}
 
@@ -122,7 +122,7 @@ func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	// Проверка авторизации
 	tokenID := GetUserIDByToken(w, r)
-	if CheckPermission(server.DB, tokenID, "USER-PUT") {
+	if !CheckPermission(server.DB, tokenID, "USER-PUT") {
 		return
 	}
 	if tokenID != uid {
@@ -149,7 +149,7 @@ func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
 	tokenID := GetUserIDByToken(w, r)
-	if CheckPermission(server.DB, tokenID, "USER-DELETE") {
+	if !CheckPermission(server.DB, tokenID, "USER-DELETE") {
 		return
 	}
 
