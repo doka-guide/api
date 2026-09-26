@@ -15,6 +15,12 @@ import (
 	"github.com/gorilla/mux"
 )
 
+type FormInfo struct {
+	ID   uint64 `json:"id"`
+	Type string `json:"type"`
+	Data string `json:"data"`
+}
+
 // CreateForm – Создание записи о новой отправленной форме
 func (server *Server) CreateForm(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
@@ -47,13 +53,17 @@ func (server *Server) CreateForm(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, formCreated.ID))
-	responses.JSON(w, http.StatusCreated, formCreated)
+	formInfo := FormInfo{}
+	formInfo.ID = formCreated.ID
+	formInfo.Type = formCreated.Type
+	formInfo.Data = formCreated.Data
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, formInfo.ID))
+	responses.JSON(w, http.StatusCreated, formInfo)
 
 	switch form.Type {
 	case "feedback":
 		submittedForm := models.FormFeedback{}
-		err = json.Unmarshal([]byte(form.Data), &submittedForm)
+		err = json.Unmarshal([]byte(formInfo.Data), &submittedForm)
 		if err != nil {
 			responses.ERROR(w, http.StatusUnprocessableEntity, err)
 			return
@@ -79,7 +89,17 @@ func (server *Server) GetForms(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
-	responses.JSON(w, http.StatusOK, forms)
+
+	count := len(*forms)
+	responseForms := []FormInfo{}
+	for i := 0; i < count; i++ {
+		formInfo := FormInfo{}
+		formInfo.ID = (*forms)[i].ID
+		formInfo.Type = (*forms)[i].Type
+		formInfo.Data = (*forms)[i].Data
+		responseForms = append(responseForms, formInfo)
+	}
+	responses.JSON(w, http.StatusOK, responseForms)
 }
 
 // GetForm – Вывод формы по ID
@@ -102,7 +122,11 @@ func (server *Server) GetForm(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
-	responses.JSON(w, http.StatusOK, formReceived)
+	formInfo := FormInfo{}
+	formInfo.ID = formReceived.ID
+	formInfo.Type = formReceived.Type
+	formInfo.Data = formReceived.Data
+	responses.JSON(w, http.StatusOK, formInfo)
 }
 
 // UpdateForm – Обновление информации в форме
@@ -171,7 +195,12 @@ func (server *Server) UpdateForm(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
 		return
 	}
-	responses.JSON(w, http.StatusOK, formUpdated)
+
+	formInfo := FormInfo{}
+	formInfo.ID = formUpdated.ID
+	formInfo.Type = formUpdated.Type
+	formInfo.Data = formUpdated.Data
+	responses.JSON(w, http.StatusOK, formInfo)
 }
 
 // DeleteForm – Удаляет данные формы из базы данных
@@ -210,6 +239,7 @@ func (server *Server) DeleteForm(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Entity", fmt.Sprintf("%d", pid))
+
 	responses.JSON(w, http.StatusNoContent, "")
 }
 

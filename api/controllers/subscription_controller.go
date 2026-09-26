@@ -18,6 +18,12 @@ import (
 	"github.com/gorilla/mux"
 )
 
+type SubscriptionInfo struct {
+	ID    uint64 `json:"id"`
+	Email string `json:"email"`
+	Data  string `json:"data"`
+}
+
 // CreateSubscription – Создание записи о новой отправленной подписке
 func (server *Server) CreateSubscription(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
@@ -102,8 +108,12 @@ func (server *Server) CreateSubscription(w http.ResponseWriter, r *http.Request)
 		false,
 	)
 
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, subscription.ID))
-	responses.JSON(w, http.StatusCreated, subscription)
+	s := SubscriptionInfo{}
+	s.ID = subscription.ID
+	s.Email = subscription.Email
+	s.Data = subscription.Data
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, s.ID))
+	responses.JSON(w, http.StatusCreated, s)
 }
 
 // OptionsSubscriptions – Для предварительной загрузки (prefetch)
@@ -123,6 +133,16 @@ func (server *Server) GetSubscriptions(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
+	}
+
+	count := len(*forms)
+	responseForms := []SubscriptionInfo{}
+	for i := 0; i < count; i++ {
+		formInfo := SubscriptionInfo{}
+		formInfo.ID = (*forms)[i].ID
+		formInfo.Email = (*forms)[i].Email
+		formInfo.Data = (*forms)[i].Data
+		responseForms = append(responseForms, formInfo)
 	}
 	responses.JSON(w, http.StatusOK, forms)
 }
@@ -147,7 +167,12 @@ func (server *Server) GetSubscription(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
-	responses.JSON(w, http.StatusOK, formReceived)
+
+	s := SubscriptionInfo{}
+	s.ID = formReceived.ID
+	s.Email = formReceived.Email
+	s.Data = formReceived.Data
+	responses.JSON(w, http.StatusOK, s)
 }
 
 // UpdateSubscription – Обновление информации в подписке
@@ -216,7 +241,12 @@ func (server *Server) UpdateSubscription(w http.ResponseWriter, r *http.Request)
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
 		return
 	}
-	responses.JSON(w, http.StatusOK, formUpdated)
+
+	s := SubscriptionInfo{}
+	s.ID = formUpdated.ID
+	s.Email = formUpdated.Email
+	s.Data = formUpdated.Data
+	responses.JSON(w, http.StatusOK, s)
 }
 
 // DeleteSubscription – Удаляет данные подписки из базы данных
@@ -255,10 +285,11 @@ func (server *Server) DeleteSubscription(w http.ResponseWriter, r *http.Request)
 		return
 	}
 	w.Header().Set("Entity", fmt.Sprintf("%d", pid))
+
 	responses.JSON(w, http.StatusNoContent, "")
 }
 
-// GetSubscriptionFormsWithHash – Вывод адресов электронной почты и настроек с указанием хэша
+// GetSubscriptionFormsWithHash – Вывод адресов электронной почты и настроек с указанием хеша
 func (server *Server) GetSubscriptionFormsWithHash(w http.ResponseWriter, r *http.Request) {
 	// Проверка авторизации
 	if !CheckPermission(server.DB, GetUserIDByToken(w, r), "SUBSCRIPTION-GET") {
